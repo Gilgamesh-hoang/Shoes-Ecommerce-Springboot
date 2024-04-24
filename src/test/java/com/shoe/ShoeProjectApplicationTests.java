@@ -1,4 +1,4 @@
-package com.shoe.shoeproject;
+package com.shoe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
