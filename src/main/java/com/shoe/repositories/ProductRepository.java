@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    List<Product> findTop4ByIsHotTrue();
+    List<Product> findTop4ByIsHotTrueAndIsDeletedFalse();
+
+    List<Product> findTop4ByCategoryIdAndIsDeletedFalse(int categoryId);
+
 }
 

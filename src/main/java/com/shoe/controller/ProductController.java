@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +21,26 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    /**
+     * Handles the GET request for the "/products/{id}" endpoint.
+     * This method retrieves the product details and similar products based on the product id and adds them to the model.
+     *
+     * @param model     The model to which the attributes will be added.
+     * @param productId The id of the product.
+     * @return The name of the view to be rendered.
+     */
+    @GetMapping("/{id}")
+    public String productDetail(Model model, @PathVariable(value = "id") int productId) {
+        // Add the product details to the model.
+        model.addAttribute("product", productService.getProductById(productId));
+
+        // Add the similar products to the model.
+        model.addAttribute("similarProducts", productService.getSimilarProducts(productId));
+
+        // Return the name of the view to be rendered.
+        return "user/product-detail";
+    }
 
     /**
      * Handles the GET request for the "/newest" endpoint.

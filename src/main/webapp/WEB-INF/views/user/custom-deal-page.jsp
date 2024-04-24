@@ -95,11 +95,11 @@
                     <div class="product-item col-lg-3 col-md-6 col-sm-6">
                         <div class="item" style="width: 100%">
                             <div class="image-container">
-                                <a class="item-img-wrapper-link" href="#">
+                                <a class="item-img-wrapper-link" href="<c:url value="/products/${item.id}"/>">
                                     <img class="img-fluid" src="${item.thumbnail}" alt="Product">
                                 </a>
                                 <div class="item-action-behaviors">
-                                    <a class="item-quick-look" data-toggle="modal" href="#quick-view">Quick Look</a>
+                                    <a class="item-quick-look" data-toggle="modal" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
                                     <a class="item-mail" href="javascript:void(0)">Mail</a>
                                     <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
                                     <a class="item-addCart" href="javascript:void(0)">Add to Cart</a>
@@ -109,12 +109,12 @@
                                 <div class="what-product-is">
                                     <ul class="bread-crumb">
                                         <li class="has-separator">
-                                            <a href="#">${item.category.name}</a>
+                                            <a>${item.category.name}</a>
                                         </li>
 
                                     </ul>
                                     <h6 class="item-title">
-                                        <a href="single-product.html">${item.name}</a>
+                                        <a href="<c:url value="/products/${item.id}"/>">${item.name}</a>
                                     </h6>
                                     <div class="item-description">
                                         <p>${item.shortDescription}</p>
@@ -137,7 +137,7 @@
                                     </c:if>
                                     <c:if test="${item.discount == 0}">
                                         <div class="item-new-price">
-                                            $${item.price}
+                                            <fmt:formatNumber type="number" pattern="$#,##0.0" value="${item.price}" />
                                         </div>
                                     </c:if>
                                 </div>
