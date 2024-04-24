@@ -9,8 +9,5 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findTop4ByIsHotTrue();
-
-    //get 6 newest products
-    List<Product> findTop6ByOrderByCreatedAtDesc();
 }
 
