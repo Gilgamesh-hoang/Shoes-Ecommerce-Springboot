@@ -23,52 +23,52 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 //@EnableMethodSecurity
 public class SecurityConfig {
-    @Autowired
-    private UserDetailServiceImpl userDetails;
+//    @Autowired
+//    private UserDetailServiceImpl userDetails;
 
     private static final String[] PUBLIC_ENDPOINS = {"/about", "/products/**", "/", "/home", "/api/v1/categories", "/auth/**"};
 //
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
-                    registry.requestMatchers("/**").permitAll();
-                })
-                .formLogin(httpSecurityFormLoginConfigurer -> {
-                    httpSecurityFormLoginConfigurer
-                            .loginPage("/auth/login")
-                            .successHandler(new AuthenticationSuccessHandler())
-                            .permitAll();
-                })
-                .build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(registry -> {
+//                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
+//                    registry.requestMatchers("/**").permitAll();
+//                })
+//                .formLogin(httpSecurityFormLoginConfigurer -> {
+//                    httpSecurityFormLoginConfigurer
+//                            .loginPage("/auth/login")
+//                            .successHandler(new AuthenticationSuccessHandler())
+//                            .permitAll();
+//                })
+//                .build();
+//    }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetails);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userDetails);
+//        authProvider.setPasswordEncoder(passwordEncoder());
+//        return authProvider;
+//    }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return userDetails;
-    }
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//        return configuration.getAuthenticationManager();
+//    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return userDetails;
+//    }
+//    @Bean
+//    PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder(10);
+//    }
 }
 
 

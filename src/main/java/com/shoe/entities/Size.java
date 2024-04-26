@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name = "sizes")
 public class Size {
@@ -26,5 +25,7 @@ public class Size {
     @Column(name = "isDeleted", columnDefinition = "TINYINT(4) DEFAULT 0")
     private boolean isDeleted;
 
-    // Getters and setters
+    public Size(String name) {
+        this.name = name;
+    }
 }

@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class SizeDTO {
     private int id;
     private String name;
+
 }
