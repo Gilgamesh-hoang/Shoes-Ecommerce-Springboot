@@ -26,6 +26,11 @@ public class ProductService {
     @Autowired
     ProductSizeService productSizeService;
 
+    public List<ProductDTO> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAllByIsDeletedFalse(pageable);
+        return productMapper.toDTOs(products.stream().toList());
+    }
+
     // This method filters products based on the provided FilterRequest and Pageable objects
     public List<ProductDTO> filter(FilterRequest filterRequest, Pageable pageRequest) {
         // Initialize an empty list to store the filtered products
