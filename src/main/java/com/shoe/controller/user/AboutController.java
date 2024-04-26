@@ -1,4 +1,4 @@
-package com.shoe.controller;
+package com.shoe.controller.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

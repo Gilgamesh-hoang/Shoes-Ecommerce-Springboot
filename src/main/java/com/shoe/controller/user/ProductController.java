@@ -1,4 +1,4 @@
-package com.shoe.controller;
+package com.shoe.controller.user;
 
 import com.shoe.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class ProductController {
         int pageSize = 8;
 
         // Get the Sort object based on the sortBy parameter. If sortBy is not a key in the map, use a default Sort object.
-        Sort sort = sortOptions().getOrDefault(sortBy, Sort.by("price").ascending());
+        Sort sort = sortOptions().getOrDefault(sortBy, Sort.by("createdAt").descending());
 
         // Create a PageRequest object for pagination and sorting.
         Pageable pageRequest = PageRequest.of(page - 1, pageSize, sort);

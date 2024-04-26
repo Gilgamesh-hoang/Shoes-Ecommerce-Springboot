@@ -1,4 +1,4 @@
-package com.shoe.controller;
+package com.shoe.controller.user;
 
 import com.shoe.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

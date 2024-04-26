@@ -91,10 +91,9 @@
                     </div>
                 </div>
                 <div class="col-lg-6 u-d-none-lg">
-                    <form class="form-searchbox">
+                    <form class="form-searchbox" method="get" action="<c:url value="/filter"/> ">
                         <label class="sr-only" for="search-landscape">Search</label>
-                        <input id="search-landscape" type="text" class="text-field" placeholder="Search everything">
-
+                        <input id="search-landscape" type="text" name="search" class="text-field" placeholder="Search everything">
                         <button id="btn-search" type="submit" class="button button-primary fas fa-search"></button>
                     </form>
                 </div>
@@ -141,7 +140,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-3">
-                    <div class="v-menu">
+                    <div class="v-menu v-close">
                             <span class="v-title">
                                 <i class="ion ion-md-menu"></i>
                                 All Categories
@@ -165,7 +164,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="custom-deal-page.html">All Products
+                            <a href="<c:url value="/filter"/>">All Products
                                 <span class="superscript-label-hot">HOT</span>
                             </a>
                         </li>
@@ -204,5 +203,4 @@
             });
         });
     });
-
 </script>
