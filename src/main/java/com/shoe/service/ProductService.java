@@ -44,6 +44,11 @@ public class ProductService {
     @Autowired
     ProductSizeRepository productSizeRepository;
 
+    public List<ProductDTO> getProductsByCategory(int categoryId, Pageable pageRequest) {
+        Page<Product> products = productRepository.findByCategoryIdAndIsDeletedFalse(categoryId, pageRequest);
+        return productMapper.toDTOs(products.stream().toList());
+    }
+
     /**
      * Saves or updates a product along with its associated data such as thumbnail, images, and sizes.
      * @param product The DTO containing the product data to be saved or updated.
@@ -393,6 +398,7 @@ public class ProductService {
     public int countAllProducts() {
         return (int) productRepository.count();
     }
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.shoe.controller.user;
 
+import com.shoe.service.CategoryService;
 import com.shoe.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,8 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    CategoryService categoryService;
 
     /**
      * Handles the GET request for the "/products/{id}" endpoint.
@@ -66,7 +69,7 @@ public class ProductController {
         Pageable pageRequest = PageRequest.of(page - 1, pageSize, sort);
 
         // Add the newest products to the model.
-        model.addAttribute("newestProducts", productService.getNewestProducts(pageRequest));
+        model.addAttribute("products", productService.getNewestProducts(pageRequest));
 
         // Calculate the maximum page number and add it to the model.
         model.addAttribute("maxPage", maxPage(productService.countAllProducts(), pageSize));
@@ -76,7 +79,43 @@ public class ProductController {
 
         // Add the sorting criteria to the model.
         model.addAttribute("sortBy", sortBy);
+        model.addAttribute("pageCategory", "Newest Products");
 
+        // Return the name of the view to be rendered.
+        return "user/custom-deal-page";
+    }
+
+    /**
+     * This method handles the GET request for the "/products/category/{categoryId}" endpoint.
+     * It retrieves the products of a specific category and adds them to the model.
+     * The method also handles pagination and sorting of the products.
+     * The method returns the name of the view to be rendered.
+     */
+    @GetMapping("/category/{categoryId}")
+    public String getCategoryProducts(@PathVariable int categoryId, Model model,
+                                      @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                      @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy
+    ) {
+        // The number of products to be displayed per page.
+        int pageSize = 8;
+
+        // Get the Sort object based on the sortBy parameter. If sortBy is not a key in the map, use a default Sort object.
+        Sort sort = sortOptions().getOrDefault(sortBy, Sort.by("createdAt").descending());
+
+        // Create a PageRequest object for pagination and sorting.
+        Pageable pageRequest = PageRequest.of(page - 1, pageSize, sort);
+
+        model.addAttribute("products", productService.getProductsByCategory(categoryId, pageRequest));
+
+        // Calculate the maximum page number and add it to the model.
+        model.addAttribute("maxPage", maxPage(productService.countAllProducts(), pageSize));
+
+        // Add the current page number to the model.
+        model.addAttribute("page", page);
+
+        // Add the sorting criteria to the model.
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("pageCategory", "Category / " + categoryService.getCategoryById(categoryId).getName());
         // Return the name of the view to be rendered.
         return "user/custom-deal-page";
     }

@@ -9,6 +9,7 @@ import com.shoe.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -74,5 +75,12 @@ public class CategoryService {
         }
         // Return true to indicate that the operation was successful
         return true;
+    }
+
+    public CategoryDTO getCategoryById(int categoryId) {
+        // Fetch the non-deleted category with the provided ID from the repository
+        Category category = categoryRepository.findByIdAndIsDeletedIsFalse(categoryId);
+        // Convert the Category entity to a CategoryDTO and return it
+        return categoryMapper.toDTO(category);
     }
 }

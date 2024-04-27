@@ -47,14 +47,14 @@
     <div class="page-style-a">
         <div class="container">
             <div class="page-intro">
-                <h2>Newest Products</h2>
+                <h2>${pageCategory}</h2>
                 <ul class="bread-crumb">
                     <li class="has-separator">
                         <i class="ion ion-md-home"></i>
                         <a href="<c:url value="/"/> ">Home</a>
                     </li>
                     <li class="is-marked">
-                        <a href="#">Newest Products</a>
+                        <a href="#">${pageCategory}</a>
                     </li>
                 </ul>
             </div>
@@ -91,7 +91,7 @@
             <!-- Page-Bar /- -->
             <!-- Row-of-Product-Container -->
             <div class="row product-container grid-style">
-                <c:forEach var="item" items="${newestProducts}" >
+                <c:forEach var="item" items="${products}" >
                     <div class="product-item col-lg-3 col-md-6 col-sm-6">
                         <div class="item" style="width: 100%">
                             <div class="image-container">
