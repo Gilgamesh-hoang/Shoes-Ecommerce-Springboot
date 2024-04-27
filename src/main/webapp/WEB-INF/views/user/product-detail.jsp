@@ -58,8 +58,8 @@
                                 <img src="${product.thumbnail}" alt="Product">
                             </a>
                             <c:forEach var="image" items="${product.images}">
-                                <a data-image="${image.url}" data-zoom-image="${image.url}">
-                                    <img src="${image.url}" alt="Product">
+                                <a data-image="${image.imageUrl}" data-zoom-image="${image.imageUrl}">
+                                    <img src="${image.imageUrl}" alt="Product">
                                 </a>
                             </c:forEach>
                         </div>

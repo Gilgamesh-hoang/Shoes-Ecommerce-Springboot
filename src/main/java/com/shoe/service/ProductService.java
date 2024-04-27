@@ -4,28 +4,192 @@ import com.shoe.dto.ProductDTO;
 import com.shoe.dto.ProductSizeDTO;
 import com.shoe.dto.SizeDTO;
 import com.shoe.dto.request.FilterRequest;
-import com.shoe.entities.Product;
+import com.shoe.entities.*;
 import com.shoe.mapper.ProductMapper;
+import com.shoe.repositories.CategoryRepository;
 import com.shoe.repositories.ProductRepository;
+import com.shoe.repositories.ProductSizeRepository;
+import com.shoe.repositories.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class ProductService {
     @Autowired
     ProductRepository productRepository;
-
+    @Autowired
+    CloudinaryService cloudinaryService;
     @Autowired
     ProductMapper productMapper;
     @Autowired
     ProductSizeService productSizeService;
+    @Autowired
+    ProductImageService imageService;
+    @Autowired
+    CartDetailService cartDetailService;
+    @Autowired
+    CategoryRepository categoryRepository;
+    @Autowired
+    SizeRepository sizeRepository;
+    @Autowired
+    ProductSizeRepository productSizeRepository;
 
+    /**
+     * Saves or updates a product along with its associated data such as thumbnail, images, and sizes.
+     * @param product The DTO containing the product data to be saved or updated.
+     * @param thumbnailProduct The thumbnail image file for the product.
+     * @param imageProduct The array of image files for the product.
+     * @param sizeIds The IDs of the sizes associated with the product.
+     * @return True if the product is successfully saved or updated, otherwise false.
+     */
+    public boolean saveProduct(ProductDTO product, MultipartFile thumbnailProduct, MultipartFile[] imageProduct, String[] sizeIds) {
+        Product newProduct = new Product();
+        long start = System.currentTimeMillis();
+        try {
+            // Check if the product ID is provided and an existing product is to be updated
+            if (product.getId() != 0) {
+                newProduct = productRepository.findById(product.getId()).orElse(null);
+                if (newProduct == null) {
+                    // If the product does not exist, return false
+                    return false;
+                }
+            }
+
+            // Retrieve the category associated with the product
+            Category category = categoryRepository.findById(product.getCategory().getId()).orElse(null);
+
+            // Set the attributes of the product
+            newProduct.setName(product.getName());
+            newProduct.setPrice(product.getPrice());
+            newProduct.setDescription(product.getDescription());
+            newProduct.setShortDescription(product.getShortDescription());
+            newProduct.setCategory(category);
+
+            // Upload the thumbnail image if provided
+            if (thumbnailProduct != null && !thumbnailProduct.isEmpty()) {
+                String url = cloudinaryService.upload(thumbnailProduct).get("url").toString();
+                newProduct.setThumbnail(url);
+            }
+
+            // Save or update the product in the database
+            newProduct = productRepository.save(newProduct);
+
+            // Upload and save the product images
+            uploadImages(newProduct.getId(), imageProduct);
+
+            // Save the product sizes
+            saveProductSizes(newProduct.getId(), sizeIds);
+
+            // Print the time taken for the operation
+            System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
+
+            // Return true to indicate successful operation
+            return true;
+        } catch (Exception e) {
+            // Print the stack trace in case of exception
+            e.printStackTrace();
+        }
+        // Return false in case of failure
+        return false;
+    }
+
+
+    private void uploadImages(int productId, MultipartFile[] imageProduct) {
+        long start = System.currentTimeMillis();
+        if (imageProduct != null && imageProduct.length != 0) {
+            imageService.deleteByProductId(productId);
+            Product newProduct = productRepository.findById(productId).orElse(null);
+            List<ProductImage> images = new ArrayList<>();
+
+            // Create an ExecutorService with a fixed thread pool.
+            ExecutorService executor = Executors.newFixedThreadPool(5);
+
+            // Create a list to hold Future objects.
+            List<Future<ProductImage>> futures = new ArrayList<>();
+
+            for (MultipartFile image : imageProduct) {
+                // Submit the task for execution and add its Future to the list.
+                futures.add(executor.submit(() -> {
+                    String url = cloudinaryService.upload(image).get("url").toString();
+                    return ProductImage.builder().product(newProduct).imageUrl(url).build();
+                }));
+            }
+
+            // Collect the results of the futures.
+            for (Future<ProductImage> future : futures) {
+                try {
+                    images.add(future.get());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Shut down the executor service.
+            executor.shutdown();
+            System.out.println("Time img: " + (System.currentTimeMillis() - start) + "ms");
+            imageService.saveAll(images);
+        }
+    }
+
+    private void saveProductSizes(int productId, String[] sizeIds) {
+        long start = System.currentTimeMillis();
+        productSizeService.deleteByProductId(productId);
+        Product newProduct = productRepository.findById(productId).orElse(null);
+
+        // Create an ExecutorService with a fixed thread pool.
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+
+        // Create a list to hold Future objects.
+        List<Future<Void>> futures = new ArrayList<>();
+
+        for (String sizeId : sizeIds) {
+            // Submit the task for execution and add its Future to the list.
+            futures.add(executor.submit(() -> {
+                Size size = sizeRepository.findById(Integer.parseInt(sizeId)).orElse(null);
+                productSizeRepository.save(ProductSize.builder().product(newProduct).size(size).build());
+                return null; // Callable needs to return a value, return null because we're not interested in the result.
+            }));
+        }
+
+        // Collect the results of the futures.
+        for (Future<Void> future : futures) {
+            try {
+                future.get(); // This will block until the future completes.
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Time size: " + (System.currentTimeMillis() - start) + "ms");
+        // Shut down the executor service.
+        executor.shutdown();
+    }
+
+    // Deletes a product by its ID. If the product is found, it is marked as deleted and all its associated sizes and images are also deleted.
+    public boolean deleteProduct(Integer id) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            return false;
+        }
+        product.setDeleted(true);
+        productRepository.save(product);
+
+        productSizeService.deleteByProductId(id);
+        imageService.deleteByProductId(id);
+
+        return true;
+    }
+
+    // Retrieves all non-deleted products, paginated according to the provided Pageable object.
     public List<ProductDTO> getAllProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAllByIsDeletedFalse(pageable);
         return productMapper.toDTOs(products.stream().toList());
@@ -217,7 +381,7 @@ public class ProductService {
      * @return A list of DTOs for the products.
      */
     public List<ProductDTO> getNewestProducts(Pageable pageable) {
-        Page<Product> all = productRepository.findAll(pageable);
+        Page<Product> all = productRepository.findAllByIsDeletedFalse(pageable);
         return productMapper.toDTOs(all.stream().toList());
     }
 

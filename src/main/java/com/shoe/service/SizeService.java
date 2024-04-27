@@ -57,7 +57,7 @@ public class SizeService {
                 sizeRepository.save(size);
 
                 // Also mark as deleted all ProductSize entities associated with the current size
-                productSizeRepository.findBySizeId(Integer.parseInt(id)).forEach(productSize -> {
+                productSizeRepository.findBySizeIdAndIsDeletedFalse(Integer.parseInt(id)).forEach(productSize -> {
                     productSize.setDeleted(true);
                     productSizeRepository.save(productSize);
                 });
