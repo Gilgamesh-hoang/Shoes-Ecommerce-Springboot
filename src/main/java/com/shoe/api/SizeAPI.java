@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/sizes")
+@RequestMapping("/api/v1/admin/sizes")
 public class SizeAPI {
     @Autowired
     SizeService sizeService;

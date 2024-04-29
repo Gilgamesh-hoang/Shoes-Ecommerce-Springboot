@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="com.shoe.util.SecurityUtils" %>
 <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
     <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
@@ -19,13 +20,21 @@
             </div>
             <ul class="navbar-nav  justify-content-end">
                 <li class="nav-item d-flex align-items-center">
-                    <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard">Online Builder</a>
+                    <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="#">Online Builder</a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
-                        <i class="fa fa-user me-sm-1"></i>
-                        <span class="d-sm-inline d-none">Sign In</span>
-                    </a>
+                    <div class="dropdown">
+                        <button class="nav-link text-body p-0" style="border: none" type="button" id="dropdownMenuAccount" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-user me-sm-1"></i>
+                            <span class="d-sm-inline d-none">
+                            <c:out value="${SecurityUtils.getPrincipal().username}"/>
+                        </span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuAccount">
+                            <li style="padding: 0 20px;" class="px-3"><a href="<c:url value="/auth/logout"/>">
+                                <i class="fas fa-sign-out-alt u-s-m-r-9"></i>Logout</a></li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">

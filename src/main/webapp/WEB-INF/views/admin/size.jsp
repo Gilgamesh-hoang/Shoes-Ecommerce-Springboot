@@ -208,7 +208,7 @@
                                 return;
                             console.log(ids)
                             $.ajax({
-                                url: '<c:url value="/api/v1/sizes"/>',
+                                url: '<c:url value="/api/v1/admin/sizes"/>',
                                 method: 'DELETE',
                                 contentType: "application/json; charset=utf-8",
                                 // dataType: "json",

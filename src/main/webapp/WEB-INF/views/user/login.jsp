@@ -59,7 +59,15 @@
                                 </button>
                             </div>
                         </c:if>
-                        <form action="j_spring_security_check" method="post">
+                        <c:if test="${error != null}">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Login failed !</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </c:if>
+                        <form action="/j_spring_security_check" method="post">
                             <div class="u-s-m-b-30">
                                 <label for="user-name-email">Username
                                     <span class="astk">*</span>
@@ -70,7 +78,7 @@
                                 <label for="login-password">Password
                                     <span class="astk">*</span>
                                 </label>
-                                <input type="text" id="login-password" name="j_password"  class="text-field" placeholder="Password">
+                                <input type="password" id="login-password" name="j_password"  class="text-field" placeholder="Password">
                             </div>
                             <div class="group-inline u-s-m-b-30">
                                 <div class="group-1">
