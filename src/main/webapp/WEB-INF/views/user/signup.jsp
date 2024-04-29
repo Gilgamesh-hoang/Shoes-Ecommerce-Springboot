@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html class="no-js" lang="en-US">
 
@@ -48,46 +49,53 @@
             <div class="row">
                 <!-- Login -->
                 <div class="col-lg-12">
-                    <div class="login-wrapper">
-                        <h2 class="account-h2 u-s-m-b-20">Login</h2>
-                        <h6 class="account-h6 u-s-m-b-30">Welcome back! Sign in to your account.</h6>
-                        <c:if test="${verified != null}">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>Register account successfully!</strong>
+                    <div class="reg-wrapper">
+                        <h2 class="account-h2 u-s-m-b-20">Register</h2>
+                        <h6 class="account-h6 u-s-m-b-30">Registering for this site allows you to access your order status and history.</h6>
+                        <c:if test="${error != null}">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Sign up failed!</strong> You should check in on some of those fields below.
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                         </c:if>
-                        <form action="j_spring_security_check" method="post">
+
+                        <form:form role="form" method="POST" action='/signup' modelAttribute="user">
                             <div class="u-s-m-b-30">
-                                <label for="user-name-email">Username
+                                <label for="fullName">Full name
                                     <span class="astk">*</span>
                                 </label>
-                                <input type="text" id="user-name-email" name="j_username"  class="text-field" placeholder="Username">
+                                <form:input type="text" id="fullName" path="fullName" class="text-field" placeholder="Full name" required="required"/>
                             </div>
                             <div class="u-s-m-b-30">
-                                <label for="login-password">Password
+                                <label for="email">Email
                                     <span class="astk">*</span>
                                 </label>
-                                <input type="text" id="login-password" name="j_password"  class="text-field" placeholder="Password">
+                                <form:input type="email" path="email" id="email" class="text-field" placeholder="Email" required="required"/>
                             </div>
-                            <div class="group-inline u-s-m-b-30">
-                                <div class="group-1">
-                                    <input type="checkbox" class="check-box" id="remember-me-token">
-                                    <label class="label-text" for="remember-me-token">Remember me</label>
-                                </div>
-                                <div class="group-2 text-right">
-                                    <div class="page-anchor">
-                                        <a href="lost-password.html">
-                                            <i class="fas fa-circle-o-notch u-s-m-r-9"></i>Lost your password?</a>
-                                    </div>
-                                </div>
+                            <div class="u-s-m-b-30">
+                                <label for="user-name">Username
+                                    <span class="astk">*</span>
+                                </label>
+                                <form:input type="text" id="user-name" path="userName" class="text-field" placeholder="Username" required="required"/>
                             </div>
-                            <div class="m-b-45">
-                                <button class="button button-outline-secondary w-100" type="submit">Login</button>
+                            <div class="u-s-m-b-30">
+                                <label for="password">Password
+                                    <span class="astk">*</span>
+                                </label>
+                                <form:input type="password" id="password" path="password" class="text-field" placeholder="Password" required="required"/>
                             </div>
-                        </form>
+                            <div class="u-s-m-b-30">
+                                <label for="confirmPassword">Confirm password
+                                    <span class="astk">*</span>
+                                </label>
+                                <form:input type="password" id="confirmPassword" path="confirmPassword" class="text-field" placeholder="Password" required="required"/>
+                            </div>
+                            <div class="u-s-m-b-45">
+                                <button type="submit" class="button button-primary w-100">Register</button>
+                            </div>
+                        </form:form>
                     </div>
                 </div>
                 <!-- Login /- -->

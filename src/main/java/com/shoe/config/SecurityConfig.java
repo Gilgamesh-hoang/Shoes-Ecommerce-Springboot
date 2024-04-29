@@ -23,7 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
 
-//@Configuration
+@Configuration
 //@EnableWebSecurity
 //@EnableMethodSecurity
 public class SecurityConfig {
@@ -65,10 +65,10 @@ public class SecurityConfig {
 //    public UserDetailsService userDetailsService() {
 //        return userDetails;
 //    }
-//    @Bean
-//    PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(10);
-//    }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
 }
 
 

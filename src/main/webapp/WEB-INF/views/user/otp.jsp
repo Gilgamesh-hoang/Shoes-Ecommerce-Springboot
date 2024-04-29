@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html class="no-js" lang="en-US">
 
@@ -46,51 +45,31 @@
     <div class="page-account u-s-p-t-80">
         <div class="container">
             <div class="row">
-                <!-- Login -->
                 <div class="col-lg-12">
-                    <div class="login-wrapper">
-                        <h2 class="account-h2 u-s-m-b-20">Login</h2>
-                        <h6 class="account-h6 u-s-m-b-30">Welcome back! Sign in to your account.</h6>
-                        <c:if test="${verified != null}">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>Register account successfully!</strong>
+                    <div class="reg-wrapper">
+                        <h2 class="account-h2 u-s-m-b-20">Verify account</h2>
+                        <c:if test="${error != null}">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>The otp code is incorrect</strong> Please check the otp code again!
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                         </c:if>
-                        <form action="j_spring_security_check" method="post">
+                        <form action="<c:url value="/signup/otp"/> " method="post" >
                             <div class="u-s-m-b-30">
-                                <label for="user-name-email">Username
+                                <label for="user-name-email">OTP code
                                     <span class="astk">*</span>
                                 </label>
-                                <input type="text" id="user-name-email" name="j_username"  class="text-field" placeholder="Username">
+                                <input type="text" id="user-name-email" name="otp" class="text-field" >
+                                <input type="hidden" name="email" value="${email}">
                             </div>
-                            <div class="u-s-m-b-30">
-                                <label for="login-password">Password
-                                    <span class="astk">*</span>
-                                </label>
-                                <input type="text" id="login-password" name="j_password"  class="text-field" placeholder="Password">
-                            </div>
-                            <div class="group-inline u-s-m-b-30">
-                                <div class="group-1">
-                                    <input type="checkbox" class="check-box" id="remember-me-token">
-                                    <label class="label-text" for="remember-me-token">Remember me</label>
-                                </div>
-                                <div class="group-2 text-right">
-                                    <div class="page-anchor">
-                                        <a href="lost-password.html">
-                                            <i class="fas fa-circle-o-notch u-s-m-r-9"></i>Lost your password?</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-b-45">
-                                <button class="button button-outline-secondary w-100" type="submit">Login</button>
+                            <div class="u-s-m-b-45">
+                                <button type="submit" class="button button-primary w-100">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
-                <!-- Login /- -->
             </div>
         </div>
     </div>

@@ -28,16 +28,6 @@
                         </a>
                         <ul class="g-dropdown" style="width:200px">
                             <li>
-                                <a href="cart.html">
-                                    <i class="fas fa-cog u-s-m-r-9"></i>
-                                    My Cart</a>
-                            </li>
-                            <li>
-                                <a href="wishlist.html">
-                                    <i class="far fa-heart u-s-m-r-9"></i>
-                                    My Wishlist</a>
-                            </li>
-                            <li>
                                 <a href="checkout.html">
                                     <i class="far fa-check-circle u-s-m-r-9"></i>
                                     Checkout</a>
@@ -45,7 +35,17 @@
                             <li>
                                 <a href="account.html">
                                     <i class="fas fa-sign-in-alt u-s-m-r-9"></i>
-                                    Login / Signup</a>
+                                    Login</a>
+                            </li>
+                            <li>
+                                <a href="<c:url value="/signup"/> ">
+                                    <i class="fas fa-sign-in-alt u-s-m-r-9"></i>
+                                    Signup</a>
+                            </li>
+                            <li>
+                                <a href="account.html">
+                                    <i class="fas fa-sign-in-alt u-s-m-r-9"></i>
+                                    Logout</a>
                             </li>
                         </ul>
                     </li>
