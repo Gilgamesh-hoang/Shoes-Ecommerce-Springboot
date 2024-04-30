@@ -1,7 +1,7 @@
 package com.shoe.service;
 
 import com.shoe.entities.User;
-import com.shoe.repositories.IUserRepository;
+import com.shoe.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,7 @@ import java.util.List;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    private IUserRepository userRepo;
+    private UserRepository userRepo;
 
     // This method is overridden from UserDetailsService interface.
     // It is used by Spring Security to authenticate and authorize user.

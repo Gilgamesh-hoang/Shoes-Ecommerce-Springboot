@@ -14,16 +14,22 @@ public class CartItem {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cartId", referencedColumnName = "id")
     private Cart cart;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "productSizeId", referencedColumnName = "id")
     private ProductSize productSize;
 
     @Column(name = "quantity")
     private int quantity;
+
+    public CartItem(Cart cart, ProductSize productSize, int quantity) {
+        this.cart = cart;
+        this.productSize = productSize;
+        this.quantity = quantity;
+    }
 
     // Getters and setters
 }

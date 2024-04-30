@@ -21,8 +21,12 @@ public class Cart {
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CartItem> cartItems;
+
+    public Cart(User user) {
+        this.user = user;
+    }
 
     // Getters and setters
 }

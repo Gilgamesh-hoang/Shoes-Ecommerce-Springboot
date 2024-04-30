@@ -18,6 +18,7 @@ public class ProductDTO {
     private String shortDescription;
     private double price;
     private boolean isHot;
+    private int quantity;
     private Category category;
     private float discount;
     private List<ProductImageDTO> images;

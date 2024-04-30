@@ -3,7 +3,7 @@ package com.shoe.service;
 import com.shoe.dto.UserDTO;
 import com.shoe.entities.User;
 import com.shoe.mapper.UserMapper;
-import com.shoe.repositories.IUserRepository;
+import com.shoe.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Service
 public class UserService {
     @Autowired
-    IUserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired

@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="/user/css/utility.css">
     <!-- Main -->
     <link rel="stylesheet" href="/user/css/bundle.css">
+
 </head>
 
 <body>
@@ -105,7 +106,6 @@
 
                                 <div class="item-action-behaviors">
                                     <a class="item-quick-look" data-toggle="modal" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
-                                    <a class="item-addCart" href="javascript:void(0)">Add to Cart</a>
                                     <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
                                     <a class="item-mail" href="javascript:void(0)">Mail</a>
                                 </div>
@@ -179,7 +179,6 @@
                                                 </a>
                                                 <div class="item-action-behaviors">
                                                     <a class="item-quick-look" data-toggle="modal" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
-                                                    <a class="item-addCart" href="javascript:void(0)">Add to Cart</a>
                                                     <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
                                                     <a class="item-mail" href="javascript:void(0)">Mail</a>
                                                 </div>
@@ -319,5 +318,6 @@
 <script type="text/javascript" src="/user/js/owl.carousel.min.js"></script>
 <!-- Main -->
 <script type="text/javascript" src="/user/js/app.js"></script>
+
 </body>
 </html>

@@ -20,11 +20,11 @@ public class ProductSize {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
     private Size size;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 

@@ -32,6 +32,9 @@ public class Product {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "quantity")
+    private int quantity;
+
     @Column(name = "discount", columnDefinition = "FLOAT(2,1) DEFAULT 0")
     private float discount;
 

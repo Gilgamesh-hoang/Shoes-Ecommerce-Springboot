@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProductSizeRepository extends JpaRepository<ProductSize, Integer> {
     List<ProductSize> findByProductIdAndIsDeletedFalse(int productId);
     List<ProductSize> findBySizeIdAndIsDeletedFalse(int sizeId);
+
+    ProductSize findByProductIdAndSizeIdAndIsDeletedFalse(int productId, int sizeId);
 }

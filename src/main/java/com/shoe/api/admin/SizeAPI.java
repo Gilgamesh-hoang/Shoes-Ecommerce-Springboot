@@ -1,4 +1,4 @@
-package com.shoe.api;
+package com.shoe.api.admin;
 
 import com.shoe.dto.CategoryDTO;
 import com.shoe.service.CategoryService;

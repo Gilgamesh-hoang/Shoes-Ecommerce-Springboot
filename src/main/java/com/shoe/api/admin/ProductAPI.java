@@ -1,4 +1,4 @@
-package com.shoe.api;
+package com.shoe.api.admin;
 
 import com.shoe.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

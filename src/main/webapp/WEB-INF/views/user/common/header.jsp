@@ -123,7 +123,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" id="mini-cart-trigger">
+                                <a href="<c:url value="/cart"/>" id="mini-cart-trigger">
                                     <i class="ion ion-md-basket"></i>
                                 </a>
                             </li>

@@ -1,4 +1,4 @@
-package com.shoe.api;
+package com.shoe.api.user;
 
 import com.shoe.dto.FilterDTO;
 import com.shoe.dto.ProductDTO;

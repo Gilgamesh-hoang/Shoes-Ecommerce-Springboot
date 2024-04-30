@@ -155,7 +155,6 @@
                                                href="<c:url value="/products/${product.id}"/>">Quick Look</a>
                                             <a class="item-mail" href="javascript:void(0)">Mail</a>
                                             <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
-                                            <a class="item-addCart" href="javascript:void(0)">Add to Cart</a>
                                         </div>
                                     </div>
                                     <div class="item-content">
@@ -491,7 +490,6 @@
                 html += '<a class="item-quick-look" data-toggle="modal" href="/products/' + product.id + '">Quick Look</a>';
                 html += '<a class="item-mail" href="javascript:void(0)">Mail</a>';
                 html += '<a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>';
-                html += '<a class="item-addCart" href="javascript:void(0)">Add to Cart</a>';
                 html += '</div></div>';
                 html += '<div class="item-content">';
                 html += '<div class="what-product-is">';
