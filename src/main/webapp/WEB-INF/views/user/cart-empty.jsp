@@ -103,5 +103,26 @@
 <script type="text/javascript" src="/user/js/owl.carousel.min.js"></script>
 <!-- Main -->
 <script type="text/javascript" src="/user/js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        var checkoutSuccess = '${checkoutSuccess}';
+        if (checkoutSuccess === 'true') {
+            Swal.fire({
+                icon: "success",
+                title: " Checkout Success",
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1200,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

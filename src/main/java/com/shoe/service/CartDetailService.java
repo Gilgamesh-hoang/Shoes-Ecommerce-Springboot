@@ -31,6 +31,25 @@ public class CartDetailService {
     @Autowired
     ProductSizeRepository productSizeRepository;
 
+    public void clearCart() {
+        // Retrieve the currently authenticated user
+        User user = SecurityUtils.getUserFromPrincipal(userRepository);
+
+        // Find the cart associated with the user
+        Cart cart = cartRepository.findByUser(user);
+
+        // If the cart doesn't exist, return
+        if (cart == null) {
+            return;
+        }
+
+        // Retrieve all cart items associated with the cart
+        List<CartItem> items = itemRepository.findByCartId(cart.getId());
+
+        // Delete all cart items
+        itemRepository.deleteAll(items);
+    }
+
     public boolean deleteCartItem(Integer cartItemId) {
         // Check if the cartItemId is null or less than or equal to 0. If it is, return false.
         if (cartItemId == null || cartItemId <= 0)

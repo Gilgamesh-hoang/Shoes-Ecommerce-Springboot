@@ -107,7 +107,7 @@
                     <div class="coupon-continue-checkout u-s-m-b-60">
                         <div class="button-area">
                             <a href="<c:url value="/"/> " class="continue">Continue Shopping</a>
-                            <a href="checkout.html" class="checkout">Proceed to Checkout</a>
+                            <a href="<c:url value="/checkout"/>" class="checkout">Proceed to Checkout</a>
                         </div>
                     </div>
                     <!-- Coupon /- -->
@@ -200,6 +200,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
+
         // Attach a click event handler to the elements with class 'btnDelete'
         $('.btnDelete').on('click', function () {
             // Retrieve the 'id' data attribute of the current element
@@ -246,7 +247,7 @@
             });
         });
 
-        function showSuccessMessage() {
+        function showSuccessMessage(timeout = true) {
             // Display a success message using Swal.fire
             Swal.fire({
                 icon: "success",
@@ -261,9 +262,11 @@
                     toast.onmouseleave = Swal.resumeTimer;
                 }
             });
-            setTimeout(function () {
-                location.reload();
-            }, 500);
+            if (timeout) {
+                setTimeout(function () {
+                    location.reload();
+                }, 500);
+            }
         }
 
         function showFailMessage() {

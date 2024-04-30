@@ -11,5 +11,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductSizeMapper {
     ProductSizeDTO toDTO(ProductSize product);
+    ProductSize toEntity(ProductSizeDTO productSizeDTO);
     List<ProductSizeDTO> toDTOs(List<ProductSize> products);
 }

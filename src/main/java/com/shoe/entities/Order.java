@@ -20,6 +20,15 @@ public class Order {
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
+
+    @Column(name = "fullName")
+    private String fullName;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "shippingFee")
     private int shippingFee;
 
