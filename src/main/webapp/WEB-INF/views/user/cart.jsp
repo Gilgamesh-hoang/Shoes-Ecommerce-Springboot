@@ -75,7 +75,8 @@
                                         </td>
                                         <td>
                                             <div class="cart-price">
-                                                 <fmt:formatNumber type="number" pattern="$#,##0.0" value="${item.productSize.product.price * (1 - item.productSize.product.discount)}" />
+                                                 <fmt:formatNumber type="number" pattern="$#,##0.0"
+                                                      value="${item.productSize.product.price * (1 - item.productSize.product.discount) * item.quantity}" />
                                             </div>
                                         </td>
                                         <td>
@@ -90,8 +91,10 @@
                                         </td>
                                         <td>
                                             <div class="action-wrapper">
-                                                <button class="button button-outline-secondary fas fa-sync"></button>
-                                                <button class="button button-outline-secondary fas fa-trash"></button>
+                                                <button class="button button-outline-secondary fas fa-sync btnUpdate"
+                                                        data-id="${item.id}" ></button>
+                                                <button class="button button-outline-secondary fas fa-trash btnDelete"
+                                                        data-id="${item.id}"></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -103,7 +106,7 @@
                     <!-- Coupon -->
                     <div class="coupon-continue-checkout u-s-m-b-60">
                         <div class="button-area">
-                            <a href="shop-v1-root-category.html" class="continue">Continue Shopping</a>
+                            <a href="<c:url value="/"/> " class="continue">Continue Shopping</a>
                             <a href="checkout.html" class="checkout">Proceed to Checkout</a>
                         </div>
                     </div>
@@ -194,9 +197,92 @@
 <script type="text/javascript" src="/user/js/owl.carousel.min.js"></script>
 <!-- Main -->
 <script type="text/javascript" src="/user/js/app.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
+        // Attach a click event handler to the elements with class 'btnDelete'
+        $('.btnDelete').on('click', function () {
+            // Retrieve the 'id' data attribute of the current element
+            const cartItemId = $(this).data('id');
+
+            // Make an AJAX request to the server
+            $.ajax({
+                url: '<c:url value="/api/v1/cart/items"/>',
+                type: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify(cartItemId),
+                success: function () {
+                    showSuccessMessage();
+                },
+                error: function () {
+                    showFailMessage();
+                }
+            });
+        });
+
+        // Attach a click event handler to the elements with class 'btnUpdate'
+        $('.btnUpdate').on('click', function () {
+            // Retrieve the 'id' data attribute of the current element
+            let id = $(this).data('id');
+
+            // Retrieve the current value of the element with the corresponding 'id' data attribute
+            let quantity = $('.quantity-text-field[data-id="'+id+'"]').val();
+
+            // Make an AJAX request to the server
+            $.ajax({
+                url: '<c:url value="/api/v1/cart/items"/>',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    cartItemId: id,
+                    quantity: quantity
+                }),
+                success: function () {
+                    showSuccessMessage();
+                },
+                error: function () {
+                    showFailMessage();
+                }
+            });
+        });
+
+        function showSuccessMessage() {
+            // Display a success message using Swal.fire
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            setTimeout(function () {
+                location.reload();
+            }, 500);
+        }
+
+        function showFailMessage() {
+            // Display a warning message using Swal.fire
+            Swal.fire({
+                icon: "warning",
+                title: "Fail!",
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 600,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+        }
+
         // Attach a change event handler to the elements with class 'quantity-text-field'
         $('.quantity-text-field').change(function () {
             // Retrieve the 'id' data attribute of the current element

@@ -31,6 +31,49 @@ public class CartDetailService {
     @Autowired
     ProductSizeRepository productSizeRepository;
 
+    public boolean deleteCartItem(Integer cartItemId) {
+        // Check if the cartItemId is null or less than or equal to 0. If it is, return false.
+        if (cartItemId == null || cartItemId <= 0)
+            return false;
+
+        // Find the cart item by its ID. If it doesn't exist, return false.
+        CartItem item = itemRepository.findById(cartItemId).orElse(null);
+        if (item == null)
+            return false;
+
+        // Delete the cart item from the repository.
+        itemRepository.delete(item);
+
+        // If the code execution reaches this point, it means the cart item was successfully deleted. So, return true.
+        return true;
+    }
+
+    public boolean updateCart(CartRequest cartRequest) {
+        // Check if the cartRequest is null. If it is, return false.
+        if (cartRequest == null)
+            return false;
+
+        // Retrieve the cartItemId and quantity from the cartRequest.
+        Integer cartItemId = cartRequest.getCartItemId();
+        Integer quantity = cartRequest.getQuantity();
+
+        // Check if the cartItemId or quantity is null or less than or equal to 0. If any of them is, return false.
+        if (cartItemId == null || cartItemId <= 0 || quantity == null || quantity <= 0)
+            return false;
+
+        // Find the cart item by its ID. If it doesn't exist, return false.
+        CartItem item = itemRepository.findById(cartItemId).orElse(null);
+        if (item == null)
+            return false;
+
+        // Set the new quantity for the cart item.
+        item.setQuantity(quantity);
+
+        // Save the updated cart item in the repository. If the saved item is not null, return true.
+        item = itemRepository.save(item);
+        return item != null;
+    }
+
     public List<CartItemDTO> getAllCartItems() {
         // Retrieve the currently authenticated user
         User user = SecurityUtils.getUserFromPrincipal(userRepository);
@@ -51,6 +94,9 @@ public class CartDetailService {
     }
 
     public boolean addToCart(CartRequest cartRequest) {
+        if (cartRequest == null)
+            return false;
+
         // Retrieve the product ID and size ID from the cart request
         Integer productId = cartRequest.getProductId();
         Integer sizeId = cartRequest.getSizeId();
@@ -97,4 +143,6 @@ public class CartDetailService {
         }
         return total;
     }
+
+
 }
