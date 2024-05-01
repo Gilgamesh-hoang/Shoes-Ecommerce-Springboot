@@ -34,9 +34,18 @@ public class OrderItemService {
                     .quantity(item.getQuantity())
                     .productSize(productSizeMapper.toEntity(item.getProductSize()))
                     .order(order)
+                    .isDeleted(order.isDeleted())
                     .price(price).build();
 
             // Save the new order item to the database
+            orderItemRepository.save(orderItem);
+        }
+    }
+
+    public void updateIsDeletedOrderItem(Order order, boolean isDeleted) {
+        List<OrderItem> orderItems = orderItemRepository.findAllByOrder(order);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.setDeleted(isDeleted);
             orderItemRepository.save(orderItem);
         }
     }

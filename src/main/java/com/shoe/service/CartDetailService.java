@@ -153,14 +153,29 @@ public class CartDetailService {
         return item != null;
     }
 
+    // Method to calculate the total price of a list of cart items
     public double getTotalPrice(List<CartItemDTO> items) {
+        // Initialize the total price to 0
         double total = 0;
+        // Iterate over each item in the list
         for (CartItemDTO item : items) {
+            // Retrieve the product associated with the item
             ProductDTO product = item.getProductSize().getProduct();
+            // Retrieve the price of the product
             double price = product.getPrice();
+            // Add the price of the item (price * (1 - discount) * quantity) to the total price
             total += price * (1 - product.getDiscount()) * item.getQuantity();
         }
+        // Return the total price
         return total;
+    }
+
+    // Method to calculate the total price of all items in the cart
+    public double getTotalPrice() {
+        // Retrieve all items in the cart
+        List<CartItemDTO> items = getAllCartItems();
+        // Calculate and return the total price of these items
+        return getTotalPrice(items);
     }
 
 
