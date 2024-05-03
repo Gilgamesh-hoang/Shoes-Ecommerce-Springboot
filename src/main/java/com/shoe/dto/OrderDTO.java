@@ -23,4 +23,7 @@ public class OrderDTO {
     private String email;
     private String phoneNumber;
     private String paymentMethod;
+    private Timestamp createdAt;
+    private double total;
+    private List<OrderItemDTO> orderItems;
 }

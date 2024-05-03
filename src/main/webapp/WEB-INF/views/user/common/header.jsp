@@ -46,9 +46,9 @@
                             </security:authorize>
                             <security:authorize access="isAuthenticated()">
                                 <li>
-                                    <a href="#">
+                                    <a href="<c:url value="/orders"/>">
                                         <i class="far fa-check-circle u-s-m-r-9"></i>
-                                        My Purchases</a>
+                                        My Orders</a>
                                 </li>
 
                                 <li>
@@ -113,7 +113,7 @@
                     <nav>
                         <ul class="mid-nav g-nav">
                             <li class="u-d-none-lg">
-                                <a href="home.html">
+                                <a href="<c:url value="/" />">
                                     <i class="ion ion-md-home u-c-brand"></i>
                                 </a>
                             </li>

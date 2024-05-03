@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -115,5 +117,46 @@ public class OrderService {
         cartDetailService.clearCart();
         // If the code execution reaches this point, it means the order status was successfully updated. So, return true.
         return true;
+    }
+
+    // Method to retrieve all orders that are not marked as deleted
+    public List<OrderDTO> findAll() {
+        // Initialize a list to store the result
+        List<OrderDTO> result = new ArrayList<>();
+        // Retrieve all orders that are not marked as deleted
+        List<Order> all = orderRepository.findAllByIsDeletedFalse();
+        // Iterate over each order
+        for (Order order : all) {
+            // Convert the Order entity to an OrderDTO object
+            OrderDTO orderDTO = orderMapper.toDTO(order);
+            // Calculate the total price of the order items associated with the order
+            double totalPrice = order.getOrderItems().stream().reduce(0.0, (subtotal, item) ->
+                    subtotal + item.getPrice() * item.getQuantity(), Double::sum);
+            // Set the total price of the OrderDTO object
+            orderDTO.setTotal(totalPrice);
+            // Add the OrderDTO object to the result list
+            result.add(orderDTO);
+        }
+        // Return the result list
+        return result;
+    }
+
+    // Method to retrieve an order by its ID
+    public OrderDTO findById(Integer id) {
+        // Retrieve the order with the given ID that is not marked as deleted
+        Order order = orderRepository.findByIdAndIsDeletedFalse(id);
+        // If the order does not exist, return null
+        if (order == null) {
+            return null;
+        }
+        // Convert the Order entity to an OrderDTO object
+        OrderDTO orderDTO = orderMapper.toDTO(order);
+        // Calculate the total price of the order items associated with the order
+        double totalPrice = order.getOrderItems().stream().reduce(0.0, (subtotal, item) ->
+                subtotal + item.getPrice() * item.getQuantity(), Double::sum);
+        // Set the total price of the OrderDTO object
+        orderDTO.setTotal(totalPrice);
+        // Return the OrderDTO object
+        return orderDTO;
     }
 }

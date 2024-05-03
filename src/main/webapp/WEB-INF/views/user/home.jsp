@@ -105,7 +105,7 @@
                                 </a>
 
                                 <div class="item-action-behaviors">
-                                    <a class="item-quick-look" data-toggle="modal" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
+                                    <a class="item-quick-look" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
                                     <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
                                     <a class="item-mail" href="javascript:void(0)">Mail</a>
                                 </div>
@@ -178,7 +178,7 @@
                                                     <img class="img-fluid" src="${item.thumbnail}" alt="Product">
                                                 </a>
                                                 <div class="item-action-behaviors">
-                                                    <a class="item-quick-look" data-toggle="modal" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
+                                                    <a class="item-quick-look" href="<c:url value="/products/${item.id}"/>">Quick Look</a>
                                                     <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
                                                     <a class="item-mail" href="javascript:void(0)">Mail</a>
                                                 </div>

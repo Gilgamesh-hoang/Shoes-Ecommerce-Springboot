@@ -151,7 +151,7 @@
                                             <img class="img-fluid" src="${product.thumbnail}" alt="Product">
                                         </a>
                                         <div class="item-action-behaviors">
-                                            <a class="item-quick-look" data-toggle="modal"
+                                            <a class="item-quick-look"
                                                href="<c:url value="/products/${product.id}"/>">Quick Look</a>
                                             <a class="item-mail" href="javascript:void(0)">Mail</a>
                                             <a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>
@@ -487,7 +487,7 @@
                 html += '<img class="img-fluid" src="' + product.thumbnail + '" alt="Product">';
                 html += '</a>';
                 html += '<div class="item-action-behaviors">';
-                html += '<a class="item-quick-look" data-toggle="modal" href="/products/' + product.id + '">Quick Look</a>';
+                html += '<a class="item-quick-look" href="/products/' + product.id + '">Quick Look</a>';
                 html += '<a class="item-mail" href="javascript:void(0)">Mail</a>';
                 html += '<a class="item-addwishlist" href="javascript:void(0)">Add to Wishlist</a>';
                 html += '</div></div>';
