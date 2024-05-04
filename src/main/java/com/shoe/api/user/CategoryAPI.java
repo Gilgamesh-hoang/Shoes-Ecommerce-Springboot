@@ -23,12 +23,4 @@ public class CategoryAPI {
         return ResponseEntity.ok(allCategories);
     }
 
-    // This method is mapped to the HTTP DELETE method and the URL "/api/v1/categories"
-    @DeleteMapping
-    public ResponseEntity<String> deleteCategory(@RequestBody String[] ids) {
-        // Call the deleteCategories method of the categoryService with the provided IDs
-        categoryService.deleteCategories(ids);
-        // Return a response entity with a success message
-        return ResponseEntity.ok("Category deleted successfully");
-    }
 }

@@ -19,10 +19,10 @@ public class ProductAPI {
         boolean isDeleted = productService.deleteProduct(id);
         // Return a response entity with a success message
         if (isDeleted)
-            return ResponseEntity.ok("Category deleted successfully");
+            return ResponseEntity.ok("Product deleted successfully");
         else {
             // Return a response entity with an error message
-            return ResponseEntity.status(500).body("Failed to delete category");
+            return ResponseEntity.status(500).body("Failed to delete Product");
         }
     }
 }

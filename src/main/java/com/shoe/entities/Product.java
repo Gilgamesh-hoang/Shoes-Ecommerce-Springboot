@@ -3,12 +3,15 @@ package com.shoe.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "products")
 public class Product {
@@ -48,7 +51,12 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductImage> images;
 
-    @Column(name = "createdAt", columnDefinition = "DATETIME(0) DEFAULT current_timestamp(6)")
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    private List<ProductSize> productSizes;
+
+    @Column(name = "createdAt")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Timestamp createdAt;
 
     @Column(name = "isDeleted", columnDefinition = "TINYINT(4) DEFAULT 0")

@@ -142,6 +142,12 @@
 <script>
     window.addEventListener("DOMContentLoaded", function () {
         $(document).ready(function () {
+            <c:if test="${error eq 'error'}">
+                showError("Fail!");
+            </c:if>
+            <c:if test="${error eq 'sizeError'}">
+                showError("Please select at least one size!");
+            </c:if>
 
             // Initialize the ClassicEditor on the HTML element with the id 'description'.
             // The ClassicEditor is a rich text editor provided by CKEditor.
@@ -243,19 +249,7 @@
                             },
                             error: function (error) {
                                 console.log('that bai')
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "Fail!",
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 600,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.onmouseenter = Swal.stopTimer;
-                                        toast.onmouseleave = Swal.resumeTimer;
-                                    }
-                                });
+                                showError("Fail!");
                             }
                         })
 
@@ -263,25 +257,21 @@
                 });
             });
 
-            (function () {
-                var isSaved = '<%= request.getAttribute("isSaved") %>';
-                if (isSaved === 'error') {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error!",
-                        text: "Something went wrong!",
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 600,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                }
-            })();
+            function showError(message) {
+                Swal.fire({
+                    icon: "warning",
+                    title: message,
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+            }
         })
     });
 </script>

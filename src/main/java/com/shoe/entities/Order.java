@@ -3,11 +3,14 @@ package com.shoe.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 import java.util.List;
 @Data
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -41,7 +44,9 @@ public class Order {
     @Column(name = "paymentMethod")
     private String paymentMethod;
 
-    @Column(name = "createdAt", columnDefinition = "DATETIME(0) DEFAULT current_timestamp(6)")
+    @Column(name = "createdAt")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Timestamp createdAt;
 
     @Column(name = "isDeleted", columnDefinition = "TINYINT(4) DEFAULT 0")

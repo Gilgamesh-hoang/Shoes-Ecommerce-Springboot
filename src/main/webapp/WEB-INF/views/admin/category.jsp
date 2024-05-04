@@ -199,6 +199,11 @@
 
         window.addEventListener("DOMContentLoaded",function (){
             $(document).ready(function(){
+                <c:if test="${success eq 'true'}">
+                    showSuccess()
+                </c:if>
+
+
                 //check all
                 $("#checkAll").change(function() {
                     $(".checkbox").prop('checked', $(this).prop("checked"));
@@ -232,22 +237,10 @@
                                 // dataType: "json",
                                 data: JSON.stringify(ids),
                                 success: function (response) {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Success!",
-                                        toast: true,
-                                        position: "top-end",
-                                        showConfirmButton: false,
-                                        timer: 600,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.onmouseenter = Swal.stopTimer;
-                                            toast.onmouseleave = Swal.resumeTimer;
-                                        }
-                                    });
+                                    showSuccess()
                                     setTimeout(function () {
                                         window.location.href = "<c:url value="/admin/categories"/>";
-                                    }, 700);
+                                    }, 1000);
                                 },
                                 error: function (error) {
                                     console.log('that bai')
@@ -270,6 +263,21 @@
                         }
                     });
                 });
+                function showSuccess() {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                }
             })
         });
     </script>

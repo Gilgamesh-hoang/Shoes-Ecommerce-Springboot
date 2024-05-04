@@ -184,12 +184,6 @@
                             <a href="<c:url value="/about"/>">About Us
                             </a>
                         </li>
-
-                        <%--                        <li>--%>
-                        <%--                            <a href="custom-deal-page.html">Super Sale--%>
-                        <%--                                <span class="superscript-label-discount">-15%</span>--%>
-                        <%--                            </a>--%>
-                        <%--                        </li>--%>
                     </ul>
                 </div>
             </div>

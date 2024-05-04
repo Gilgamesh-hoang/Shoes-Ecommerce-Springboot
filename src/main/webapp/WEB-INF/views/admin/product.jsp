@@ -44,8 +44,8 @@
                 <div class="row justify-content-center mt-4">
                     <c:forEach var="product_item" items="${products}">
                         <div class="col-xl-3 col-md-4 col-sm-6 col-12 mb-4">
-                            <div class="card py-3">
-                                <div class="card-header p-0  mx-3 border-radius-lg">
+                            <div class="card py-3" style="height: 100%;">
+                                <div class="card-header p-0  mx-3 border-radius-lg" style="height: 100%;">
                                     <a href="<c:url value="/products/${product_item.id}"/>" style="background: rgb(171,172,171);
                                             background: linear-gradient(125deg, rgba(171,172,171,1) 35%, rgba(205,205,205,1) 100%);
                                              cursor:pointer;" class="d-block shadow-xl border-radius-lg">
@@ -128,6 +128,22 @@
 <script>
     window.addEventListener("DOMContentLoaded", function () {
         $(document).ready(function () {
+            <c:if test="${success eq 'success'}">
+                Swal.fire({
+                    icon: "success",
+                    title: "Success!",
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+            </c:if>
+
             //paging
             // This function is responsible for handling the pagination of the products page.
             $(function () {
@@ -162,24 +178,6 @@
                 });
             });
 
-            (function () {
-                var isSaved = '<%= request.getAttribute("isSaved") %>';
-                if (isSaved === 'success') {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Success!",
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 600,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                }
-            })();
         })
     });
 </script>

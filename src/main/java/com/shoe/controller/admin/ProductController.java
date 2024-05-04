@@ -29,7 +29,8 @@ public class ProductController {
     SizeService sizeService;
 
     @GetMapping()
-    public String dashboard(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
+    public String dashboard(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                            @RequestParam(value = "success", required = false) String success) {
         // Define the number of products to be displayed per page
         int pageSize = 12;
 
@@ -42,6 +43,7 @@ public class ProductController {
         // Add the products and the current page number to the model
         model.addAttribute("products", allProducts);
         model.addAttribute("page", page);
+        model.addAttribute("success", success);
 
         // Calculate the maximum page number and add it to the model
         model.addAttribute("maxPage", maxPage(productService.countAllProducts(), pageSize));
@@ -61,28 +63,29 @@ public class ProductController {
         // Check if the sizeIds array is null or empty, or if the product object is null
         if (sizeIds == null || sizeIds.length == 0 || product == null) {
             // If so, add an error message to the model and redirect to the previous page
-            model.addAttribute("error", "Please select at least one size");
-            return "redirect:" + request.getHeader("Referer");
+//            model.addAttribute("error", "Please select at least one size");
+            return "redirect:/admin/products/update?error=sizeError";
+//            return "redirect:" + request.getHeader("Referer");
         } else {
             // Otherwise, try to save the product
             boolean isSaved = productService.saveProduct(product, thumbnailProduct, imageProduct, sizeIds);
 
             // If the product was saved successfully, add a success message to the model
             if (isSaved) {
-                model.addAttribute("isSaved", "success");
+//                model.addAttribute("isSaved", "success");
+                return "redirect:/admin/products?success=success";
             } else {
                 // If the product was not saved successfully, add an error message to the model and redirect to the previous page
-                model.addAttribute("isSaved", "error");
-                return "redirect:" + request.getHeader("Referer");
+//                model.addAttribute("isSaved", "error");
+//                return "redirect:" + request.getHeader("Referer");
+                return "redirect:/admin/products/update?error=error";
             }
         }
-
-        // Redirect to the products page
-        return "redirect:/admin/products";
     }
 
     @GetMapping("/update")
-    public String detailPage(Model model, @RequestParam(value = "id", required = false) Integer productId) {
+    public String detailPage(Model model, @RequestParam(value = "id", required = false) Integer productId,
+                             @RequestParam(value = "error", required = false) String error) {
         // Create a new ProductDTO object
         ProductDTO product = new ProductDTO();
 
@@ -93,6 +96,7 @@ public class ProductController {
         // Add the categories and sizes to the model
         model.addAttribute("categories", allCategories);
         model.addAttribute("sizes", sizesSizeDTOS);
+        model.addAttribute("error", error);
 
         // If a product ID was provided, retrieve the product with that ID
         if (productId != null) {

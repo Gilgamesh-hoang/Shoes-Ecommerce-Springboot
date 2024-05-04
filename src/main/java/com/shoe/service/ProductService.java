@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -51,15 +52,15 @@ public class ProductService {
 
     /**
      * Saves or updates a product along with its associated data such as thumbnail, images, and sizes.
-     * @param product The DTO containing the product data to be saved or updated.
+     *
+     * @param product          The DTO containing the product data to be saved or updated.
      * @param thumbnailProduct The thumbnail image file for the product.
-     * @param imageProduct The array of image files for the product.
-     * @param sizeIds The IDs of the sizes associated with the product.
+     * @param imageProduct     The array of image files for the product.
+     * @param sizeIds          The IDs of the sizes associated with the product.
      * @return True if the product is successfully saved or updated, otherwise false.
      */
     public boolean saveProduct(ProductDTO product, MultipartFile thumbnailProduct, MultipartFile[] imageProduct, String[] sizeIds) {
         Product newProduct = new Product();
-        long start = System.currentTimeMillis();
         try {
             // Check if the product ID is provided and an existing product is to be updated
             if (product.getId() != 0) {
@@ -96,7 +97,6 @@ public class ProductService {
             saveProductSizes(newProduct.getId(), sizeIds);
 
             // Print the time taken for the operation
-            System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
 
             // Return true to indicate successful operation
             return true;
@@ -110,44 +110,51 @@ public class ProductService {
 
 
     private void uploadImages(int productId, MultipartFile[] imageProduct) {
-        long start = System.currentTimeMillis();
-        if (imageProduct != null && imageProduct.length != 0) {
-            imageService.deleteByProductId(productId);
-            Product newProduct = productRepository.findById(productId).orElse(null);
-            List<ProductImage> images = new ArrayList<>();
+        // Calculate the number of images in the 'imageProduct' array where the original filename is empty
+        int size = Arrays.stream(imageProduct)
+                .filter(part -> Objects.equals(part.getOriginalFilename(), ""))
+                .toList()
+                .size();
 
-            // Create an ExecutorService with a fixed thread pool.
-            ExecutorService executor = Executors.newFixedThreadPool(5);
-
-            // Create a list to hold Future objects.
-            List<Future<ProductImage>> futures = new ArrayList<>();
-
-            for (MultipartFile image : imageProduct) {
-                // Submit the task for execution and add its Future to the list.
-                futures.add(executor.submit(() -> {
-                    String url = cloudinaryService.upload(image).get("url").toString();
-                    return ProductImage.builder().product(newProduct).imageUrl(url).build();
-                }));
-            }
-
-            // Collect the results of the futures.
-            for (Future<ProductImage> future : futures) {
-                try {
-                    images.add(future.get());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Shut down the executor service.
-            executor.shutdown();
-            System.out.println("Time img: " + (System.currentTimeMillis() - start) + "ms");
-            imageService.saveAll(images);
+        // If there is at least one such image, return from the method
+        if (size > 0) {
+            return;
         }
+
+        // If there are no such images, delete all images associated with the product ID
+        imageService.deleteByProductId(productId);
+        Product newProduct = productRepository.findById(productId).orElse(null);
+        List<ProductImage> images = new ArrayList<>();
+
+        // Create an ExecutorService with a fixed thread pool.
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+
+        // Create a list to hold Future objects.
+        List<Future<ProductImage>> futures = new ArrayList<>();
+
+        for (MultipartFile image : imageProduct) {
+            // Submit the task for execution and add its Future to the list.
+            futures.add(executor.submit(() -> {
+                String url = cloudinaryService.upload(image).get("url").toString();
+                return ProductImage.builder().product(newProduct).imageUrl(url).build();
+            }));
+        }
+
+        // Collect the results of the futures.
+        for (Future<ProductImage> future : futures) {
+            try {
+                images.add(future.get());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Shut down the executor service.
+        executor.shutdown();
+        imageService.saveAll(images);
     }
 
     private void saveProductSizes(int productId, String[] sizeIds) {
-        long start = System.currentTimeMillis();
         productSizeService.deleteByProductId(productId);
         Product newProduct = productRepository.findById(productId).orElse(null);
 
@@ -174,7 +181,6 @@ public class ProductService {
                 e.printStackTrace();
             }
         }
-        System.out.println("Time size: " + (System.currentTimeMillis() - start) + "ms");
         // Shut down the executor service.
         executor.shutdown();
     }
@@ -202,6 +208,39 @@ public class ProductService {
 
     // This method filters products based on the provided FilterRequest and Pageable objects
     public List<ProductDTO> filter(FilterRequest filterRequest, Pageable pageRequest) {
+        // Initialize an empty list to store the filtered products
+        List<ProductDTO> list = new ArrayList<>();
+
+        // Convert the size IDs and category IDs from the FilterRequest to lists
+        List<String> sizes = Arrays.asList(filterRequest.getSizeIds());
+        List<String> categories = Arrays.asList(filterRequest.getCategoryIds());
+
+        // Search for products by name using the search term from the FilterRequest and the Pageable object
+        List<ProductDTO> products = searchByProductName(filterRequest.getSearch(), pageRequest);
+
+        // Iterate over the found products
+        for (ProductDTO product : products) {
+            // Get the size IDs for the product
+            List<Integer> sizeIds = productSizeService.findByProductId(product.getId())
+                    .stream()
+                    .map(ProductSizeDTO::getSize)
+                    .map(SizeDTO::getId)
+                    .toList();
+
+            // If there are no categories specified, or the product's category is in the list of categories, add the product to the list
+            if (categories == null || categories.isEmpty() || categories.contains(product.getCategory().getId() + "")) {
+                list.add(product);
+            }
+            // If there are no sizes specified, or the product's size is in the list of sizes, add the product to the list
+            else if (sizes == null || sizes.isEmpty() || sizes.stream().anyMatch(size -> size.contains(sizeIds + ""))) {
+                list.add(product);
+            }
+        }
+
+        // Return the list of filtered products
+        return list;
+    }
+    public List<ProductDTO> filter2(FilterRequest filterRequest, Pageable pageRequest) {
         // Initialize an empty list to store the filtered products
         List<ProductDTO> list = new ArrayList<>();
 
@@ -398,7 +437,6 @@ public class ProductService {
     public int countAllProducts() {
         return (int) productRepository.count();
     }
-
 
 
 }

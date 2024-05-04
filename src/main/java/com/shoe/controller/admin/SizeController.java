@@ -21,13 +21,13 @@ public class SizeController {
 
     // This method is mapped to the HTTP GET method and the URL "/admin/sizes"
     @GetMapping()
-    public String dashboard(Model model) {
+    public String dashboard(Model model, @RequestParam(value = "success", required = false) String success){
         // Retrieve all sizes from the size service
         List<SizeDTO> allSizes = sizeService.getAllSizes();
 
         // Add the list of sizes to the model that will be used by the view
         model.addAttribute("sizes", allSizes);
-
+        model.addAttribute("success", success);
         // Return the name of the view that will be used to render the response
         // In this case, the view is "admin/size"
         return "admin/size";
@@ -58,6 +58,6 @@ public class SizeController {
         }
 
         // Redirect to the "/admin/sizes" URL
-        return "redirect:/admin/sizes";
+        return "redirect:/admin/sizes?success=true";
     }
 }

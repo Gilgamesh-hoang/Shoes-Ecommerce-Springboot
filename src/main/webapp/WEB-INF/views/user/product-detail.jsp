@@ -55,11 +55,11 @@
                         <img id="zoom-pro" class="img-fluid" src="${product.thumbnail}"
                              data-zoom-image="${product.thumbnail}" alt="Zoom Image">
                         <div id="gallery" class="u-s-m-t-10">
-                            <a class="active" data-image="${product.thumbnail}" data-zoom-image="${product.thumbnail}">
+                            <a class="active" style="height: auto;" data-image="${product.thumbnail}" data-zoom-image="${product.thumbnail}">
                                 <img src="${product.thumbnail}" alt="Product">
                             </a>
                             <c:forEach var="image" items="${product.images}">
-                                <a data-image="${image.imageUrl}" data-zoom-image="${image.imageUrl}">
+                                <a style="height: auto;" data-image="${image.imageUrl}" data-zoom-image="${image.imageUrl}">
                                     <img src="${image.imageUrl}" alt="Product">
                                 </a>
                             </c:forEach>
@@ -190,12 +190,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#description">Description</a>
                                 </li>
-                                <%--                                <li class="nav-item">--%>
-                                <%--                                    <a class="nav-link" data-toggle="tab" href="#specification">Specifications</a>--%>
-                                <%--                                </li>--%>
-                                <%--                                <li class="nav-item">--%>
-                                <%--                                    <a class="nav-link" data-toggle="tab" href="#review">Reviews (15)</a>--%>
-                                <%--                                </li>--%>
                             </ul>
                         </div>
                         <div class="tab-content">

@@ -18,9 +18,10 @@ public class CategoryController {
 
     // This method is mapped to the HTTP GET method and the URL "/admin/categories"
     @GetMapping()
-    public String dashboard(Model model) {
+    public String dashboard(Model model, @RequestParam(value = "success", required = false) String success) {
         // Retrieve all categories from the category service
         model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("success", success);
         // Return the name of the view that will be used to render the response
         // In this case, the view is "admin/category"
         return "admin/category";
@@ -49,6 +50,6 @@ public class CategoryController {
             }
         }
         // Redirect to the "/admin/categories" URL
-        return "redirect:/admin/categories";
+        return "redirect:/admin/categories?success=true";
     }
 }
