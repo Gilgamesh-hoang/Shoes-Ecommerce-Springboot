@@ -33,18 +33,25 @@ public class FilterAPI {
 
         // Get the sort option based on the sort by value in the request
         Sort sort = sortOptions().get(filterRequest.getSortBy());
-        // Create a PageRequest object with the page number, page size, and sort option
-        Pageable pageRequest = PageRequest.of(filterRequest.getPage() - 1, pageSize, sort);
 
         // Get the total number of products that match the filter criteria
         int totalResult = productService.filter(filterRequest).size();
+        int maxPage = maxPage(totalResult, pageSize);
+        if (filterRequest.getPage() > maxPage) {
+            filterRequest.setPage(maxPage);
+        }
+
+        // Create a PageRequest object with the page number, page size, and sort option
+        Pageable pageRequest = PageRequest.of(filterRequest.getPage() - 1, pageSize, sort);
+
+
 
         // Get the list of products for the requested page
         List<ProductDTO> result = productService.filter(filterRequest, pageRequest);
 
         // Build a FilterDTO object with the page number, product list, and maximum page number
         FilterDTO filterDTO = FilterDTO.builder().page(filterRequest.getPage())
-                .list(result).maxPage(maxPage(totalResult, pageSize)).build();
+                .list(result).maxPage(maxPage).build();
 
         // Return the FilterDTO object in the response
         return ResponseEntity.ok(filterDTO);

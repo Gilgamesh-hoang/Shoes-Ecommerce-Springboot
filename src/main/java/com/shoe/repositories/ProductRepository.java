@@ -5,18 +5,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-//    @Query("SELECT p FROM Product p WHERE " +
-//            "(:categoryIds IS NULL OR p.category.id IN (:categoryIds)) AND " +
-//            "(:sizeIds IS NULL OR p. IN (:sizeIds)) AND " +
-//            "(:search IS NULL OR p.name LIKE %:search%)")
-//    @Query("SELECT DISTINCT p FROM Product p INNER JOIN p.productSizes ps ")
-    Page<Product> filter(String[] categoryIds, String[] sizeIds, String search, Pageable pageable);
+    @Query("SELECT DISTINCT p FROM Product p INNER JOIN p.productSizes ps INNER JOIN ps.size s " +
+            "WHERE ((:search IS NULL OR :search = '' OR p.name LIKE %:search%) AND " +
+            "(:categoryIds IS NULL OR p.category.id IN :categoryIds) AND " +
+            "(:sizeIds IS NULL OR s.id IN :sizeIds))")
+    Page<Product> filter(@Param("categoryIds") String[] categoryIds,
+                         @Param("sizeIds") String[] sizeIds,
+                         @Param("search") String search,
+                         Pageable pageable);
 
     List<Product> findTop4ByIsHotTrueAndIsDeletedFalse();
 

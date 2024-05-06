@@ -57,27 +57,21 @@ public class ProductController {
                               @RequestParam(required = false, value = "thumbnailProduct") MultipartFile thumbnailProduct,
                               @RequestParam(required = false, value = "imageProduct") MultipartFile[] imageProduct,
                               @RequestParam(value = "sizeIds") String[] sizeIds,
-                              HttpServletRequest request,
                               @ModelAttribute("product") ProductDTO product) {
 
         // Check if the sizeIds array is null or empty, or if the product object is null
         if (sizeIds == null || sizeIds.length == 0 || product == null) {
             // If so, add an error message to the model and redirect to the previous page
-//            model.addAttribute("error", "Please select at least one size");
             return "redirect:/admin/products/update?error=sizeError";
-//            return "redirect:" + request.getHeader("Referer");
         } else {
             // Otherwise, try to save the product
             boolean isSaved = productService.saveProduct(product, thumbnailProduct, imageProduct, sizeIds);
 
             // If the product was saved successfully, add a success message to the model
             if (isSaved) {
-//                model.addAttribute("isSaved", "success");
                 return "redirect:/admin/products?success=success";
             } else {
                 // If the product was not saved successfully, add an error message to the model and redirect to the previous page
-//                model.addAttribute("isSaved", "error");
-//                return "redirect:" + request.getHeader("Referer");
                 return "redirect:/admin/products/update?error=error";
             }
         }

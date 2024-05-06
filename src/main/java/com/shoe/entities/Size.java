@@ -23,8 +23,8 @@ public class Size {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "size", cascade = CascadeType.ALL)
-//    private List<ProductSize> productSizes;
+    @OneToMany(mappedBy = "size", cascade = CascadeType.ALL)
+    private List<ProductSize> productSizes;
 
     @Column(name = "createdAt")
     @Temporal(TemporalType.TIMESTAMP)
@@ -37,4 +37,5 @@ public class Size {
     public Size(String name) {
         this.name = name;
     }
+
 }

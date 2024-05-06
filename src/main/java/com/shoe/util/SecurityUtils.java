@@ -1,6 +1,7 @@
 package com.shoe.util;
 
 import com.shoe.repositories.UserRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -28,4 +29,5 @@ public class SecurityUtils {
         com.shoe.entities.User user = userRepository.findByUserName(principal.getUsername());
         return principal == null ? null : user;
     }
+
 }

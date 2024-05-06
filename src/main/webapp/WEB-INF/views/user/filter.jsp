@@ -301,7 +301,6 @@
             function setupFilterButtonClick() {
                 // When the filter button is clicked, set the current page and filter products
                 $("#filter-btn").click(function () {
-                    currentPage = 1;
                     filterProducts();
                 });
             }
@@ -328,6 +327,11 @@
                     success: function (data) {
                         // On success, update the product container with the list of products
                         updateProductContainer(data.list);
+                        console.log(data);
+                        $('#pagination').twbsPagination('destroy');
+                        totalPages = data.maxPage;
+                        currentPage = data.page;
+                        setupPagination()
                     },
                     error: function (error) {
                         // On error, log the error
@@ -358,126 +362,6 @@
                 $('.product-container').html(html);
             }
 
-            // $(function () {
-            //     window.pagObj = $('#pagination').twbsPagination({
-            //         totalPages: totalPages,
-            //         visiblePages: 5,
-            //         startPage: currentPage,
-            //         onPageClick: function (event, page) {
-            //             if (currentPage !== page) {
-            //                 currentPage = page;
-            //                 var categoryIds = [];
-            //                 var sizeIds = [];
-            //
-            //                 $(".category-checkbox:checked").each(function () {
-            //                     categoryIds.push($(this).val());
-            //                 });
-            //                 $(".size-checkbox:checked").each(function () {
-            //                     sizeIds.push($(this).val());
-            //                 });
-            //                 $.ajax({
-            //                     url: "http://localhost:8080/api/v1/filter",
-            //                     type: "POST",
-            //                     contentType: "application/json",
-            //                     dataType: "json",
-            //                     data: JSON.stringify({
-            //                         categoryIds: categoryIds,
-            //                         sizeIds: sizeIds,
-            //                         search: search,
-            //                         sortBy: sortBy,
-            //                         page: currentPage
-            //                     }),
-            //                     success: function (data) {
-            //                         let html = '';
-            //                         for (let i = 0; i < data.list.length; i++) {
-            //                             html += generateProductHTML(data.list[i]);
-            //                         }
-            //                         $(".product-container").empty();
-            //                         $('.product-container').html(html);
-            //                     },
-            //                     error: function (error) {
-            //                         console.log(error);
-            //                     }
-            //                 });
-            //             }
-            //         }
-            //     });
-            // });
-            // $('select[name="sortBy"]').change(function() {
-            //     sortBy = $(this).val(); // Lấy giá trị được chọn trong select
-            //     var categoryIds = [];
-            //     var sizeIds = [];
-            //
-            //
-            //     $(".category-checkbox:checked").each(function () {
-            //         categoryIds.push($(this).val());
-            //     });
-            //     $(".size-checkbox:checked").each(function () {
-            //         sizeIds.push($(this).val());
-            //     });
-            //     $.ajax({
-            //         url: "http://localhost:8080/api/v1/filter",
-            //         type: "POST",
-            //         contentType: "application/json",
-            //         dataType: "json",
-            //         data: JSON.stringify({
-            //             categoryIds: categoryIds,
-            //             sizeIds: sizeIds,
-            //             search: search,
-            //             sortBy: sortBy,
-            //             page: 1
-            //         }),
-            //         success: function (data) {
-            //             currentPage = 1;
-            //             let html = '';
-            //             for (let i = 0; i < data.list.length; i++) {
-            //                 html += generateProductHTML(data.list[i]);
-            //             }
-            //             $(".product-container").empty();
-            //             $('.product-container').html(html);
-            //         },
-            //         error: function (error) {
-            //             console.log(error);
-            //         }
-            //     });
-            // });
-            //
-            // $("#filter-btn").click(function () {
-            //     var categoryIds = [];
-            //     var sizeIds = [];
-            //
-            //
-            //     $(".category-checkbox:checked").each(function () {
-            //         categoryIds.push($(this).val());
-            //     });
-            //     $(".size-checkbox:checked").each(function () {
-            //         sizeIds.push($(this).val());
-            //     });
-            //     $.ajax({
-            //         url: "http://localhost:8080/api/v1/filter",
-            //         type: "POST",
-            //         contentType: "application/json",
-            //         dataType: "json",
-            //         data: JSON.stringify({
-            //             categoryIds: categoryIds,
-            //             sizeIds: sizeIds,
-            //             search: search,
-            //             sortBy: sortBy,
-            //             page: currentPage
-            //         }),
-            //         success: function (data) {
-            //             let html = '';
-            //             for (let i = 0; i < data.list.length; i++) {
-            //                 html += generateProductHTML(data.list[i]);
-            //             }
-            //             $(".product-container").empty();
-            //             $('.product-container').html(html);
-            //         },
-            //         error: function (error) {
-            //             console.log(error);
-            //         }
-            //     });
-            // });
             function generateProductHTML(product) {
                 let html = '';
                 html += '<div class="product-item col-lg-4 col-md-6 col-sm-6">';

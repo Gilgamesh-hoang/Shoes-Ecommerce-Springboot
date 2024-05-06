@@ -51,8 +51,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductImage> images;
 
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//    private List<ProductSize> productSizes;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductSize> productSizes;
 
     @Column(name = "createdAt")
     @Temporal(TemporalType.TIMESTAMP)

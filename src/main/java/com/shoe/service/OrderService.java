@@ -7,10 +7,10 @@ import com.shoe.mapper.OrderMapper;
 import com.shoe.repositories.OrderRepository;
 import com.shoe.repositories.UserRepository;
 import com.shoe.util.SecurityUtils;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class OrderService {
         // Set the user, shipping fee, and creation time of the order
         order.setUser(user);
         order.setShippingFee(0);
-        order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        encodeHtml(order);
         // Save the order to the database
         order = orderRepository.save(order);
         // If the order is not saved successfully, return false
@@ -69,6 +69,22 @@ public class OrderService {
         cartDetailService.clearCart();
         // If the code execution reaches this point, it means the order was successfully saved. So, return true.
         return orderMapper.toDTO(order);
+    }
+
+    // This method is used to encode HTML special characters in the Order object's fields
+    private void encodeHtml(Order order) {
+        // Encode HTML special characters in the full name field
+        order.setFullName(Encode.forHtml(order.getFullName()));
+        // Encode HTML special characters in the address field
+        order.setAddress(Encode.forHtml(order.getAddress()));
+        // Encode HTML special characters in the payment method field
+        order.setPaymentMethod(Encode.forHtml(order.getPaymentMethod()));
+        // Encode HTML special characters in the email field
+        order.setEmail(Encode.forHtml(order.getEmail()));
+        // Encode HTML special characters in the phone number field
+        order.setPhoneNumber(Encode.forHtml(order.getPhoneNumber()));
+        // Encode HTML special characters in the note field
+        order.setNote(Encode.forHtml(order.getNote()));
     }
 
     // Method to save an order without payment
@@ -84,9 +100,10 @@ public class OrderService {
         // Set the user, shipping fee, and creation time of the order
         order.setUser(user);
         order.setShippingFee(0);
-        order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         // Mark the order as deleted (not paid)
         order.setDeleted(true);
+        encodeHtml(order);
+
         // Save the order to the database
         order = orderRepository.save(order);
         // If the order is not saved successfully, return null

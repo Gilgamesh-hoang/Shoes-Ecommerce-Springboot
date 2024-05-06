@@ -4,6 +4,7 @@ import com.shoe.dto.UserDTO;
 import com.shoe.entities.User;
 import com.shoe.mapper.UserMapper;
 import com.shoe.repositories.UserRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class UserService {
         user.setRole("USER");
 
         // Save the user to the database.
+        encodeHtml(user);
         user = userRepository.save(user);
 
         // If the user was saved successfully, send an OTP to the user's email.
@@ -56,6 +58,13 @@ public class UserService {
 
         // If the user was not saved successfully, return null.
         return null;
+    }
+
+    private void encodeHtml(User user) {
+        user.setFullName(Encode.forHtml(user.getFullName()));
+        user.setUserName(Encode.forHtml(user.getUserName()));
+        user.setEmail(Encode.forHtml(user.getEmail()));
+        user.setPhoneNumber(Encode.forHtml(user.getPhoneNumber()));
     }
 
     // This method is responsible for verifying a user's OTP.

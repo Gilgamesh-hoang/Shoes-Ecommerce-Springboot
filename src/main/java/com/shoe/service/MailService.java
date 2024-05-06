@@ -3,6 +3,7 @@ package com.shoe.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,7 +36,7 @@ public class MailService {
 
         // The content of the email is built using a StringBuilder.
         StringBuilder content = new StringBuilder();
-        content.append("<p>Dear ").append(fullName).append(",</p>");
+        content.append("<p>Dear ").append(Encode.forHtml(fullName)).append(",</p>");
         content.append("<p>Thank you for registering with us! To complete the verification process and ensure the security of ")
                 .append("your account, please find your One-Time Password (OTP) below:</p>");
         content.append("<p>OTP: <b>");

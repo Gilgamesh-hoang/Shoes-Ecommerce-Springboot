@@ -6,6 +6,7 @@ import com.shoe.entities.Product;
 import com.shoe.mapper.CategoryMapper;
 import com.shoe.repositories.CategoryRepository;
 import com.shoe.repositories.ProductRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class CategoryService {
         // Update the category's name and code
         category.setName(name);
         category.setCode(code);
+        encodeHtml(category);
         // Save the updated category back to the repository
         categoryRepository.save(category);
     }
@@ -49,8 +51,15 @@ public class CategoryService {
             Category category = new Category();
             category.setName(name);
             category.setCode(code);
+            encodeHtml(category);
             categoryRepository.save(category);
         }
+    }
+
+    private void encodeHtml(Category category) {
+        // Encode the name and code of the category
+        category.setName(Encode.forHtml(category.getName()));
+        category.setCode(Encode.forHtml(category.getCode()));
     }
 
     // This method marks categories as deleted

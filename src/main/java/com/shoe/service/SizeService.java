@@ -5,6 +5,7 @@ import com.shoe.entities.Size;
 import com.shoe.mapper.SizeMapper;
 import com.shoe.repositories.ProductSizeRepository;
 import com.shoe.repositories.SizeRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class SizeService {
         // Check if a size with the same name already exists and is not marked as deleted
         if (sizeRepository.findByNameAndIsDeletedFalse(name) == null) {
             // If not, save a new Size entity with the provided name
+            name = Encode.forHtml(name);
             sizeRepository.save(new Size(name));
         }
     }
@@ -40,6 +42,7 @@ public class SizeService {
         Size size = sizeRepository.findById(id).orElse(null);
         // If the Size entity exists, update its name and save it
         if (size != null) {
+            name = Encode.forHtml(name);
             size.setName(name);
             sizeRepository.save(size);
         }

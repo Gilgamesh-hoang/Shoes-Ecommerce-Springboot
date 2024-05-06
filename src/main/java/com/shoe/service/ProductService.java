@@ -10,6 +10,7 @@ import com.shoe.repositories.CategoryRepository;
 import com.shoe.repositories.ProductRepository;
 import com.shoe.repositories.ProductSizeRepository;
 import com.shoe.repositories.SizeRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -88,6 +89,7 @@ public class ProductService {
             }
 
             // Save or update the product in the database
+            encodeHtml(newProduct);
             newProduct = productRepository.save(newProduct);
 
             // Upload and save the product images
@@ -106,6 +108,12 @@ public class ProductService {
         }
         // Return false in case of failure
         return false;
+    }
+
+    private void encodeHtml(Product product) {
+        product.setName(Encode.forHtml(product.getName()));
+        product.setDescription(Encode.forHtml(product.getDescription()));
+        product.setShortDescription(Encode.forHtml(product.getShortDescription()));
     }
 
 
@@ -208,115 +216,16 @@ public class ProductService {
 
     // This method filters products based on the provided FilterRequest and Pageable objects
     public List<ProductDTO> filter(FilterRequest filterRequest, Pageable pageRequest) {
-        // Initialize an empty list to store the filtered products
-        List<ProductDTO> list = new ArrayList<>();
-
-        // Convert the size IDs and category IDs from the FilterRequest to lists
-        List<String> sizes = Arrays.asList(filterRequest.getSizeIds());
-        List<String> categories = Arrays.asList(filterRequest.getCategoryIds());
-
-        // Search for products by name using the search term from the FilterRequest and the Pageable object
-        List<ProductDTO> products = searchByProductName(filterRequest.getSearch(), pageRequest);
-
-        // Iterate over the found products
-        for (ProductDTO product : products) {
-            // Get the size IDs for the product
-            List<Integer> sizeIds = productSizeService.findByProductId(product.getId())
-                    .stream()
-                    .map(ProductSizeDTO::getSize)
-                    .map(SizeDTO::getId)
-                    .toList();
-
-            // If there are no categories specified, or the product's category is in the list of categories, add the product to the list
-            if (categories == null || categories.isEmpty() || categories.contains(product.getCategory().getId() + "")) {
-                list.add(product);
-            }
-            // If there are no sizes specified, or the product's size is in the list of sizes, add the product to the list
-            else if (sizes == null || sizes.isEmpty() || sizes.stream().anyMatch(size -> size.contains(sizeIds + ""))) {
-                list.add(product);
-            }
-        }
-
-        // Return the list of filtered products
-        return list;
-    }
-    public List<ProductDTO> filter2(FilterRequest filterRequest, Pageable pageRequest) {
-        // Initialize an empty list to store the filtered products
-        List<ProductDTO> list = new ArrayList<>();
-
-        // Convert the size IDs and category IDs from the FilterRequest to lists
-        List<String> sizes = Arrays.asList(filterRequest.getSizeIds());
-        List<String> categories = Arrays.asList(filterRequest.getCategoryIds());
-
-        // Search for products by name using the search term from the FilterRequest and the Pageable object
-        List<ProductDTO> products = searchByProductName(filterRequest.getSearch(), pageRequest);
-
-        // Iterate over the found products
-        for (ProductDTO product : products) {
-            // Get the size IDs for the product
-            List<Integer> sizeIds = productSizeService.findByProductId(product.getId())
-                    .stream()
-                    .map(ProductSizeDTO::getSize)
-                    .map(SizeDTO::getId)
-                    .toList();
-
-            // If there are no categories specified, or the product's category is in the list of categories, add the product to the list
-            if (categories == null || categories.isEmpty() || categories.contains(product.getCategory().getId() + "")) {
-                list.add(product);
-            }
-            // If there are no sizes specified, or the product's size is in the list of sizes, add the product to the list
-            else if (sizes == null || sizes.isEmpty() || sizes.stream().anyMatch(size -> size.contains(sizeIds + ""))) {
-                list.add(product);
-            }
-        }
-
-        // Return the list of filtered products
-        return list;
+        String[] categoryIds = filterRequest.getCategoryIds().length == 0 ? null : filterRequest.getCategoryIds();
+        String[] sizeIds = filterRequest.getSizeIds().length == 0 ? null : filterRequest.getSizeIds();
+        String search = filterRequest.getSearch();
+        Page<Product> products = productRepository.filter(categoryIds, sizeIds, search, pageRequest);
+        return productMapper.toDTOs(products.stream().toList());
     }
 
     // This method filters products based on the provided FilterRequest
     public List<ProductDTO> filter(FilterRequest filterRequest) {
-        // Initialize an empty list to store the filtered products
-        List<ProductDTO> list = new ArrayList<>();
-
-        // Convert the size IDs and category IDs from the FilterRequest to lists
-        List<String> sizes = Arrays.asList(filterRequest.getSizeIds());
-        List<String> categories = Arrays.asList(filterRequest.getCategoryIds());
-
-        // Search for products by name using the search term from the FilterRequest
-        List<ProductDTO> products = searchByProductName(filterRequest.getSearch());
-
-        // Iterate over the found products
-        for (ProductDTO product : products) {
-            // Get the size IDs for the product
-            List<Integer> sizeIds = productSizeService.findByProductId(product.getId())
-                    .stream()
-                    .map(ProductSizeDTO::getSize)
-                    .map(SizeDTO::getId)
-                    .toList();
-
-            // If there are no categories specified, or the product's category is in the list of categories, add the product to the list
-            if (categories == null || categories.isEmpty()) {
-                list.add(product);
-            } else if (categories.contains(product.getCategory().getId() + "")) {
-                list.add(product);
-            }
-            // If there are no sizes specified, or the product's size is in the list of sizes, add the product to the list
-            else if (sizes == null || sizes.isEmpty()) {
-                list.add(product);
-            } else {
-                // If the product's size is in the list of sizes, add the product to the list
-                for (String size : sizes) {
-                    if (size.contains(sizeIds + "")) {
-                        list.add(product);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Return the list of filtered products
-        return list;
+        return filter(filterRequest, Pageable.unpaged());
     }
 
     // This method searches for products by name using the provided search term and Pageable object
