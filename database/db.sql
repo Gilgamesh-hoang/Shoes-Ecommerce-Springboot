@@ -13,12 +13,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for shoe_project
-DROP DATABASE IF EXISTS `shoe_project`;
-CREATE DATABASE IF NOT EXISTS `shoe_project` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `shoe_project`;
+-- Dumping database structure for shoes_project
+DROP DATABASE IF EXISTS `shoes_project`;
+CREATE DATABASE IF NOT EXISTS `shoes_project` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `shoes_project`;
 
--- Dumping structure for table shoe_project.carts
+-- Dumping structure for table shoes_project.carts
 CREATE TABLE IF NOT EXISTS `carts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
@@ -27,14 +27,11 @@ CREATE TABLE IF NOT EXISTS `carts` (
   CONSTRAINT `FKb5o626f86h46m4s7ms6ginnop` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.carts: ~0 rows (approximately)
+-- Dumping data for table shoes_project.carts: ~1 rows (approximately)
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
-INSERT INTO `carts` (`id`, `user_id`) VALUES
-	(2, 1),
-	(1, 3);
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.cart_items
+-- Dumping structure for table shoes_project.cart_items
 CREATE TABLE IF NOT EXISTS `cart_items` (
   `cart_id` int(11) DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,13 +44,11 @@ CREATE TABLE IF NOT EXISTS `cart_items` (
   CONSTRAINT `FKpcttvuq4mxppo8sxggjtn5i2c` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.cart_items: ~0 rows (approximately)
+-- Dumping data for table shoes_project.cart_items: ~0 rows (approximately)
 /*!40000 ALTER TABLE `cart_items` DISABLE KEYS */;
-INSERT INTO `cart_items` (`cart_id`, `id`, `product_size_id`, `quantity`) VALUES
-	(2, 29, 200, 1);
 /*!40000 ALTER TABLE `cart_items` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.categories
+-- Dumping structure for table shoes_project.categories
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `is_deleted` tinyint(4) DEFAULT 0,
@@ -63,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.categories: ~8 rows (approximately)
+-- Dumping data for table shoes_project.categories: ~8 rows (approximately)
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
 INSERT INTO `categories` (`id`, `is_deleted`, `created_at`, `code`, `name`) VALUES
 	(1, 0, '2024-04-23 21:27:33', 'tennis', 'Tennis'),
@@ -76,7 +71,7 @@ INSERT INTO `categories` (`id`, `is_deleted`, `created_at`, `code`, `name`) VALU
 	(15, 1, '2024-05-04 14:02:06', 'nuoc-epsadfasdas', 'soccercascz');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.orders
+-- Dumping structure for table shoes_project.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `is_deleted` tinyint(4) DEFAULT 0,
@@ -94,11 +89,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.orders: ~0 rows (approximately)
+-- Dumping data for table shoes_project.orders: ~0 rows (approximately)
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.order_items
+-- Dumping structure for table shoes_project.order_items
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `is_deleted` tinyint(4) DEFAULT 0,
@@ -113,11 +108,11 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   CONSTRAINT `FKbioxgbv59vetrxe0ejfubep1w` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.order_items: ~0 rows (approximately)
+-- Dumping data for table shoes_project.order_items: ~0 rows (approximately)
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.products
+-- Dumping structure for table shoes_project.products
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -136,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   CONSTRAINT `FKog2rp4qthbtt2lfyhfo32lsw9` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.products: ~5 rows (approximately)
+-- Dumping data for table shoes_project.products: ~12 rows (approximately)
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
 INSERT INTO `products` (`id`, `name`, `description`, `thumbnail`, `short_description`, `category_id`, `price`, `is_deleted`, `created_at`, `is_hot`, `discount`, `quantity`) VALUES
 	(1, 'Nike Air Max 90', '<p>You gotta know where you\'ve been to know where you\'re going. We took that to heart when creating the Stay Loyal 3, a modern shoe built on the Air Jordan legacy. Inside and out, they\'re made for versatility, with minimalist looks, cloud-like cushioning and design elements that echo the AJ4. In other words, style with proven lasting power.</p><p><strong>Benefits</strong></p><ul><li>AJ4 design elements come through in the upper and the midsole.</li><li>Leather and textiles in the upper gives you a shoe built to last.</li><li>Nike Air technology absorbs impact for cushioning with every step.</li><li>Heel pull-tab gets you in and out of your shoes with ease.</li></ul><p><strong>Product details</strong></p><ul><li>Embroidered Jumpman on tongue</li><li>Screen-printed logos</li><li>Colour Shown: White/Wolf Grey/Team Red</li><li>Style: FB1396-160</li><li>Country/Region of Origin: Vietnam</li></ul>', 'http://res.cloudinary.com/dvh2rphf4/image/upload/v1714810491/mjoawalgi2xnzopicgxq.webp', 'Inspired by the original that debuted in 1985, the Air Jordan 1 Low offers a clean, classic look that\\\'s familiar yet always fresh.', 6, 101.7, 0, '2024-04-23 21:35:13', 1, 0.2, 50),
@@ -153,7 +148,7 @@ INSERT INTO `products` (`id`, `name`, `description`, `thumbnail`, `short_descrip
 	(12, 'Air Jordan 1 High G NRG', '<p>You gotta know where you\'ve been to know where you\'re going. We took that to heart when creating the Stay Loyal 3, a modern shoe built on the Air Jordan legacy. Inside and out, they\'re made for versatility, with minimalist looks, cloud-like cushioning and design elements that echo the AJ4. In other words, style with proven lasting power.</p><p><strong>Benefits</strong></p><ul><li>AJ4 design elements come through in the upper and the midsole.</li><li>Leather and textiles in the upper gives you a shoe built to last.</li><li>Nike Air technology absorbs impact for cushioning with every step.</li><li>Heel pull-tab gets you in and out of your shoes with ease.</li></ul><p><strong>Product details</strong></p><ul><li>Embroidered Jumpman on tongue</li><li>Screen-printed logos</li><li>Colour Shown: White/Wolf Grey/Team Red</li><li>Style: FB1396-160</li><li>Country/Region of Origin: Vietnam</li></ul>', 'http://res.cloudinary.com/dvh2rphf4/image/upload/v1714810812/bk6zrq6c5dl3wrqd9lvk.webp', 'One of the reasons why MJ loves golf so much: It&rsquo;s like looking into a mirror.', 6, 111.0, 0, '2024-04-23 21:39:24', 0, 0.0, 50);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.product_images
+-- Dumping structure for table shoes_project.product_images
 CREATE TABLE IF NOT EXISTS `product_images` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) DEFAULT NULL,
@@ -164,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `product_images` (
   CONSTRAINT `FKqnq71xsohugpqwf3c9gxmsuy` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.product_images: ~0 rows (approximately)
+-- Dumping data for table shoes_project.product_images: ~28 rows (approximately)
 /*!40000 ALTER TABLE `product_images` DISABLE KEYS */;
 INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `is_deleted`) VALUES
 	(21, 1, 'http://res.cloudinary.com/dvh2rphf4/image/upload/v1714810493/wcpv7iiquisybaolixe3.webp', 0),
@@ -197,7 +192,7 @@ INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `is_deleted`) VAL
 	(48, 12, 'http://res.cloudinary.com/dvh2rphf4/image/upload/v1714810814/gfo3ylpp3ktphkfxskbz.webp', 0);
 /*!40000 ALTER TABLE `product_images` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.product_sizes
+-- Dumping structure for table shoes_project.product_sizes
 CREATE TABLE IF NOT EXISTS `product_sizes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `is_deleted` tinyint(4) DEFAULT 0,
@@ -211,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `product_sizes` (
   CONSTRAINT `FK4isa0j51hpdn7cx04m831jic4` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.product_sizes: ~0 rows (approximately)
+-- Dumping data for table shoes_project.product_sizes: ~70 rows (approximately)
 /*!40000 ALTER TABLE `product_sizes` DISABLE KEYS */;
 INSERT INTO `product_sizes` (`id`, `is_deleted`, `product_id`, `size_id`, `created_at`) VALUES
 	(147, 0, 1, 2, NULL),
@@ -286,7 +281,7 @@ INSERT INTO `product_sizes` (`id`, `is_deleted`, `product_id`, `size_id`, `creat
 	(216, 0, 12, 7, NULL);
 /*!40000 ALTER TABLE `product_sizes` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.sizes
+-- Dumping structure for table shoes_project.sizes
 CREATE TABLE IF NOT EXISTS `sizes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `is_deleted` tinyint(4) DEFAULT 0,
@@ -295,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `sizes` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.sizes: ~8 rows (approximately)
+-- Dumping data for table shoes_project.sizes: ~8 rows (approximately)
 /*!40000 ALTER TABLE `sizes` DISABLE KEYS */;
 INSERT INTO `sizes` (`id`, `is_deleted`, `created_at`, `name`) VALUES
 	(1, 0, '2024-04-23 21:27:33', 'EU35'),
@@ -308,7 +303,7 @@ INSERT INTO `sizes` (`id`, `is_deleted`, `created_at`, `name`) VALUES
 	(8, 0, '2024-04-23 21:27:33', 'EU42');
 /*!40000 ALTER TABLE `sizes` ENABLE KEYS */;
 
--- Dumping structure for table shoe_project.users
+-- Dumping structure for table shoes_project.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(255) DEFAULT NULL,
@@ -324,12 +319,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `UK_6dotkott2kjsp8vw4d0m25fb7` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table shoe_project.users: ~3 rows (approximately)
+-- Dumping data for table shoes_project.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `user_name`, `password`, `email`, `full_name`, `otp`, `phone_number`, `role`, `created_at`, `is_deleted`) VALUES
-	(1, 'a', '$2a$12$9szEjqLykjaQVvPTnccyRuPLqAfBwCUMRNut8OECjLXLS4HW0LyiG', 'a@gmail.com', NULL, NULL, NULL, 'ADMIN', '2024-04-25 23:39:56', 0),
-	(2, 'b', '$2a$12$9szEjqLykjaQVvPTnccyRuPLqAfBwCUMRNut8OECjLXLS4HW0LyiG', 'B', NULL, NULL, NULL, 'USER', '2024-04-25 23:40:15', 0),
-	(3, 'admin', '$2a$12$9szEjqLykjaQVvPTnccyRuPLqAfBwCUMRNut8OECjLXLS4HW0LyiG', '21130363@st.hcmuaf.edu.vn', 'Võ Phi Hoàng', NULL, '342332312323', 'USER', NULL, 0);
+	(1, 'admin', '$2a$12$2/VOIkO7QwWOHqnz3/f96uNy8d31UpmK7Nn5dquUmXh7E7.n2XmvS', 'a@gmail.com', 'admin', NULL, NULL, 'ADMIN', '2024-04-25 23:39:56', 0),
+	(2, 'user123', '$2a$12$2/VOIkO7QwWOHqnz3/f96uNy8d31UpmK7Nn5dquUmXh7E7.n2XmvS', 'b@gmail.com', 'user123', NULL, NULL, 'USER', '2024-04-25 23:40:15', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
