@@ -282,7 +282,12 @@ body {
   position: relative;
   background-size: cover;
   height: 506px; }
-
+.one,.two,.three {
+  background-size: 100% auto;
+  background-position: center;
+  object-fit: cover;
+  background-repeat: no-repeat;
+}
 .one {
   background-image: url(../images/main-slider/carousel1.jpg); }
 

@@ -196,9 +196,10 @@
         $(document).ready(function () {
             //using ajax to get the catory list with api http://localhost:8080/api/v1/categories
             $.ajax({
-                url: "http://localhost:8080/api/v1/categories",
+                url: "<c:url value="/api/v1/categories"/>",
                 type: "GET",
                 success: function (data) {
+                    console.log(data)
                     var html = "";
                     for (var i = 0; i < data.length; i++) {
                         html += "<li><a href='/products/category/" + data[i].id + "'><i class='fas fa-shoe-prints'></i>"

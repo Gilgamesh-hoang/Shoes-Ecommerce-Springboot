@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> {
                     // Requests to "/admin/**" and "/api/v1/admin/**" require the user to have the "ADMIN" authority.
                     registry.requestMatchers("/admin/**", "/api/v1/admin/**").hasAuthority("ADMIN");
-                    registry.requestMatchers("/api/v1/categories", "/cart", "/api/v1/cart/items", "/checkout/**",
+                    registry.requestMatchers("/cart", "/api/v1/cart/items", "/checkout/**",
                                     "/api/v1/checkout")
                             .hasAnyAuthority("USER", "ADMIN");
                     // All other requests are permitted for all users.
