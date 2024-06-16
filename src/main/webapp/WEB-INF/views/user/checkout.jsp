@@ -64,10 +64,10 @@
                                                 required="required"/>
                                 </div>
                                 <div class="street-address u-s-m-b-13">
-                                    <label for="req-st-address">Street Address
+                                    <label for="address">Street Address
                                         <span class="astk">*</span>
                                     </label>
-                                    <form:input type="text" path="address" id="req-st-address" class="text-field"
+                                    <form:input type="text" path="address" id="address" class="text-field"
                                                 placeholder="House name and street name" required="required"/>
                                 </div>
                                 <div class="group-inline u-s-m-b-13">
@@ -222,7 +222,7 @@
             let jsonObject = {};
 
             // Iterate over each entry in the FormData object
-            for (const [key, value]  of formData.entries()) {
+            for (const [key, value] of formData.entries()) {
                 // Add the entry to the jsonObject
                 jsonObject[key] = value;
             }
@@ -231,10 +231,32 @@
             return JSON.stringify(jsonObject);
         }
 
+        function validateEmail(email) {
+            // Biểu thức chính quy cho email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePhoneNumber(phoneNumber) {
+            // Biểu thức chính quy cho số điện thoại bắt đầu bằng 0 và có 10 số
+            const phoneRegex = /^0\d{9}$/;
+            return phoneRegex.test(phoneNumber);
+        }
+
         // Event handler for the form submit event
         $('#checkout-form').on('submit', async function (event) {
             // Prevent the form from submitting normally
             event.preventDefault();
+            // validate
+            if (!validateEmail($('#email').val()) ||
+                !validatePhoneNumber($('#phone').val()) ||
+                $('#fullName').val().trim() === '' ||
+                $('#address').val().trim() === '') {
+
+                handlePaymentMessage("error", "Form is invalid", null);
+                return;
+            }
+
             // Convert the form data to JSON
             var formData = formToJson(this);
             // Check if the 'vnpay' radio button is selected
@@ -252,7 +274,7 @@
 
             // Send the AJAX request
             $.ajax(ajaxConfig)
-                .then(function(response) {
+                .then(function (response) {
                     // If 'vnpay' is selected, handle the payment response
                     if (isVnPaySelected) {
                         handlePaymentResponse(response);
@@ -263,7 +285,7 @@
                     // Log the successful response
                     console.log("Request successful:", response);
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     // If the request fails, show a warning message
                     handlePaymentMessage("warning", "Checkout Failed!", null);
                     // Log the error
@@ -287,7 +309,7 @@
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,
-                timer: 600,
+                timer: 1000,
                 timerProgressBar: true,
                 didOpen: (toast) => {
                     toast.onmouseenter = Swal.stopTimer;

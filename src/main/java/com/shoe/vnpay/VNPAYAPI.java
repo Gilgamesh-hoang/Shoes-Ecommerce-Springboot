@@ -6,6 +6,7 @@ import com.shoe.dto.OrderDTO;
 import com.shoe.service.CartDetailService;
 import com.shoe.service.OrderService;
 import com.shoe.util.TripleDESEncoder;
+import com.shoe.validate.Validator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,11 @@ public class VNPAYAPI {
 
     @PostMapping
     public ResponseEntity<String> checkoutHandle(@RequestBody OrderDTO orderDTO, HttpServletRequest request) {
+        // validate
+        if (!Validator.isValidPhoneNumber(orderDTO.getPhoneNumber()) || !Validator.isValidEmail(orderDTO.getEmail())
+                || Validator.isEmpty(orderDTO.getAddress()) || Validator.isEmpty(orderDTO.getFullName()))
+            return ResponseEntity.badRequest().build();
+
         // Save the order and get the saved order
         OrderDTO order = orderService.saveOrderNotPayment(orderDTO);
         // Encrypt the order ID

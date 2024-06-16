@@ -17,7 +17,7 @@ public class Validator {
     public static boolean isValidPhoneNumber(String phoneNumber) {
         if (isEmpty(phoneNumber))
             return false;
-        String phoneRegex = "^0?[1-9]\\d{8,9}$";
+        String phoneRegex = "^0\\d{9}$";
 
         Pattern pattern = Pattern.compile(phoneRegex);
         Matcher matcher = pattern.matcher(phoneNumber);

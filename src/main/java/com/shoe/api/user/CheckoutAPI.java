@@ -2,6 +2,7 @@ package com.shoe.api.user;
 
 import com.shoe.dto.OrderDTO;
 import com.shoe.service.OrderService;
+import com.shoe.validate.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +18,19 @@ public class CheckoutAPI {
 
     @PostMapping
     public ResponseEntity<Void> checkoutHandle(@RequestBody OrderDTO orderDTO) {
-        // Save the order and get the result
+        // validate
+        if (!Validator.isValidPhoneNumber(orderDTO.getPhoneNumber()) || !Validator.isValidEmail(orderDTO.getEmail())
+                || Validator.isEmpty(orderDTO.getAddress()) || Validator.isEmpty(orderDTO.getFullName()))
+            return ResponseEntity.badRequest().build();
+
+
+//         Save the order and get the result
         OrderDTO order = orderService.saveOrder(orderDTO);
-        // If the order is saved successfully, redirect to the cart page with a success message
+//         If the order is saved successfully, redirect to the cart page with a success message
         if (order != null) {
             return ResponseEntity.ok().build();
         }
-        // If the order is not saved, redirect to the checkout page with an error message
+//         If the order is not saved, redirect to the checkout page with an error message
         return ResponseEntity.badRequest().build();
     }
 }
